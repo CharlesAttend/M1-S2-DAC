@@ -5,6 +5,7 @@
 * SAM : Stockage et Accès aux Mégadonnées (Scalable Datastores)
 * RITAL : Recherche d’Information et Traitement Automatique du Langage Naturel
 * DJ : Décisions et jeux
+
 Pour plus de cours, il y a ce [lien google drive](https://drive.google.com/drive/folders/1g7cq-u_X6-kglTt23AGK8-1U69PVNY8L?usp=sharing)
 
 ## Notes manuscrites

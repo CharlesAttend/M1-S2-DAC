@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="15" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="workbench.sql.macros.MacroGroup" id="MacroGroup0">
+    <void property="macros">
+     <void method="add">
+      <object class="workbench.sql.macros.MacroDefinition">
+       <void property="name">
+        <string>p0</string>
+       </void>
+       <void property="text">
+        <string>explain plan
+for
+${current_statement}$
+;
+
+select plan_table_output
+from table(dbms_xplan.display(&apos;plan_table&apos;, null, &apos;basic&apos;));
+
+delete plan_table;</string>
+       </void>
+      </object>
+     </void>
+     <void method="add">
+      <object class="workbench.sql.macros.MacroDefinition">
+       <void property="name">
+        <string>p1</string>
+       </void>
+       <void property="sortOrder">
+        <int>1</int>
+       </void>
+       <void property="text">
+        <string>explain plan
+for
+${current_statement}$
+;
+
+select plan_table_output
+from table(dbms_xplan.display(&apos;plan_table&apos;, null, &apos;basic +rows&apos;));
+
+delete plan_table;</string>
+       </void>
+      </object>
+     </void>
+     <void method="add">
+      <object class="workbench.sql.macros.MacroDefinition">
+       <void property="name">
+        <string>p2</string>
+       </void>
+       <void property="sortOrder">
+        <int>2</int>
+       </void>
+       <void property="text">
+        <string>explain plan
+for
+${current_statement}$
+;
+
+select plan_table_output
+from table(dbms_xplan.display(&apos;plan_table&apos;, null, &apos;basic +rows +predicate&apos;));
+
+delete plan_table;</string>
+       </void>
+      </object>
+     </void>
+     <void method="add">
+      <object class="workbench.sql.macros.MacroDefinition">
+       <void property="name">
+        <string>p3</string>
+       </void>
+       <void property="shortcut">
+        <object class="workbench.resource.StoreableKeyStroke">
+         <void property="keyCode">
+          <int>112</int>
+         </void>
+        </object>
+       </void>
+       <void property="sortOrder">
+        <int>3</int>
+       </void>
+       <void property="text">
+        <string>explain plan
+for
+${current_statement}$
+;
+
+select plan_table_output
+from table(dbms_xplan.display(&apos;plan_table&apos;, null, &apos;basic +rows +predicate +projection&apos;));
+
+delete plan_table;</string>
+       </void>
+      </object>
+     </void>
+     <void method="add">
+      <object class="workbench.sql.macros.MacroDefinition">
+       <void property="name">
+        <string>p4</string>
+       </void>
+       <void property="shortcut">
+        <object class="workbench.resource.StoreableKeyStroke">
+         <void property="keyCode">
+          <int>113</int>
+         </void>
+        </object>
+       </void>
+       <void property="sortOrder">
+        <int>4</int>
+       </void>
+       <void property="text">
+        <string>explain plan
+for
+${current_statement}$
+;
+
+select plan_table_output
+from table(dbms_xplan.display(&apos;plan_table&apos;, null, &apos;basic +rows +predicate +projection +bytes +cost&apos;));
+
+delete plan_table;
+
+
+
+
+</string>
+       </void>
+      </object>
+     </void>
+     <void method="add">
+      <object class="workbench.sql.macros.MacroDefinition">
+       <void property="name">
+        <string>p5</string>
+       </void>
+       <void property="sortOrder">
+        <int>5</int>
+       </void>
+       <void property="text">
+        <string>explain plan
+for
+${current_statement}$
+;
+
+select plan_table_output
+from table(dbms_xplan.display(&apos;plan_table&apos;, null, &apos;typical +projection&apos;));
+
+--prompt 
+--prompt  Relation entre un noeud son parent:
+
+select id, parent_id
+from plan_table
+where parent_id is not null
+order by parent_id;
+
+delete plan_table;
+
+</string>
+       </void>
+      </object>
+     </void>
+    </void>
+    <void property="name">
+     <string>optimize</string>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

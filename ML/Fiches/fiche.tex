@@ -1,0 +1,113 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage[french]{babel}
+
+\usepackage[default,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb} %math
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{systeme}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    % pdfpagemode=FullScreen,
+    }
+\urlstyle{same} %\href{url}{Text}
+
+\theoremstyle{plain}% default
+\newtheorem{thm}{Théorème}[section]
+\newtheorem{lem}[thm]{Lemme}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{cor}{Corollaire}
+%\newtheorem*{KL}{Klein's Lemma}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Définition}[section]
+\newtheorem{exmp}{Exemple}[section]
+% \newtheorem{xca}[exmp]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remarque}
+\newtheorem*{note}{Note}
+%\newtheorem{case}{Case}
+
+
+
+\title{Fiche ML}
+\author{Charles Vin}
+\date{S2-2023}
+
+\begin{document}
+\maketitle
+\section{Généralité}
+\begin{itemize}
+    \item Fonction de perte : quantifie l'erreur associé à une décision. Erreur simple : A chaque fois qu'on se trompe, on compte 1 : 0-1 loss
+    \item Risque : Proba de se tromper, $ R(y_i | x) = \sum_{j}^{} l(y_i, y_j)P(y_j | x)$
+\end{itemize}
+
+\section{Arbre de décision}
+
+\section{Classfieur bayesien}
+On a : 
+\begin{itemize}
+    \item $ P(y) $ fréquence des classe dans le dataset
+    \item $ P(x|y) $ les points de notre jeux de donnée. Graphiquement : les points coloriés
+\end{itemize}
+On cherche : 
+\[
+    \arg \max _y P(y|x) = \arg \max _y \frac{P(x|y) P(y)}{P(x)}
+.\]
+$ P(x) $ difficile à calculer = répartition des points dans l'espace, dans le graph 2d non colorié. En général très petit, uniquement utile pour générer des données, pas pour faire l'argmax (aka classifier).
+Classifier bayésien = le classifier qui minimise le risque = le meilleurs classifieur possible
+
+\section{Estimation de densité}
+\subsection{Par histogramme}
+
+\begin{defn}[Estimation par histogramme]
+    \begin{itemize}
+        \item Cas discret : Comptage dans chaque classe puis normalisation par le nombre d'exemple $ N $ 
+        \item Cas continue : Discrétisation des valeurs puis comptage et normalisation
+    \end{itemize}
+\end{defn}
+Importance de la discrétisation : \begin{itemize}
+    \item Petit $\rightarrow$ sur-apprentissage, 
+    \item Trop grand $\rightarrow$ sous-apprentissage
+\end{itemize}
+Limite : \begin{itemize}
+    \item Grande dimention $\rightarrow$ Perte de sens
+    \item Effet de bord : petit changement dans les bins, gros changement d'estimation. 
+\end{itemize}
+$\rightarrow$ Solution : Estimation par noyaux
+
+\subsection{Estimation de densité par noyaux}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics*[width=\textwidth]{./fig1.png}
+    \caption{Intuition de l'estimation par noyaux}
+    \label{intuition_noyaux}
+\end{figure}
+Intuition figure \ref*{intuition_noyaux} : Plutôt que de décider d'une discrétisation a priori, l'estimation est faîte en centrant une fenêtre autour du point d'intérêt $ x_0 $  (dans un espace de dimension $d$). $\rightarrow$ Problème : pas continue (si on bouge la boite et qu'un point rentre dedans, ça fait faire un saut à la fonction)
+
+\subsubsection{Fenêtre de Parzen}
+On combine la solution précédente avec une densité/noyaux. Classiquement Gaussien. pour obtenir un truc lisse et continue
+\begin{defn}[Fenêtre de Parzen]
+    Soit $ (x_1, \dots, x_N) \sim f $ iid 
+    \[
+        \hat{f}_h(x) = \frac{1}{N*h} \sum_{i=1}^{N}K (\frac{x - x_i}{h})
+    .\]
+    Avec $ K $ le noyaux \textbf{centrée et réduit sur $ x $ }, souvent une fonction gaussienne. Si c'est une fonction rectangle ça fonctionne aussi. Puis y'a plein d'autre noyaux possible.
+\end{defn}
+
+
+
+
+
+\end{document}

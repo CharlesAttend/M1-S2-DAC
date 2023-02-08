@@ -54,6 +54,36 @@
 \end{itemize}
 
 \section{Arbre de décision}
+Algo général : 
+\begin{enumerate}
+    \item Déterminer la meilleure caractéristique dans l'ensemble de données d'entraînement.
+    \item Diviser les données d'entraînement en sous-ensembles contenant les valeurs possibles de la meilleure caractéristique.
+    \item Générez de manière récursive de nouveaux arbres de décision en utilisant les sous-ensembles de données créés.
+    \item Lorsqu'on ne peut plus classifier les données, on s'arrête.
+\end{enumerate}
+Méthode de division des données : On vas utiliser l'entropie 
+\begin{defn}[Entropie]   
+    \href{https://www.youtube.com/watch?v=YtebGVx-Fxw}{Origine de la formule de l'entropie}
+    Soit $ X $ une variable aléatoire pouvant prendre $ n $ valeurs $ x_i $ 
+    \[
+        H(X) = - \sum_{i=1}^{n}P(X = x_i)\log_{} (P(X = x_i))
+    .\]
+    Mesure l'homogénéité d'un dataset. C'est également la moyenne de la suprise (voir la vidéo)
+\end{defn}
+\begin{defn}[Gain d'information]
+    Mesure la réduction expects de l'entropie causé par le partitioning des exemples.
+
+    En faisant un test $T$ sur un des attributs, on obtient deux partitions d'exemples de $X$ : $X_1$ qui vérifie le test et $X_2$ qui ne vérifie pas le test (resp. $Y_1$ et $Y_2$).
+    \[
+        H(Y|T) = \frac{\left| X_1 \right| }{\left| X \right| } H(Y_1) + \frac{\left| X_2 \right| }{\left| X \right| } H(Y_2)
+    .\]
+    Gain d'information : 
+    \[
+        I(T, Y) = H(Y) - H(Y|T)
+    .\]
+    \textbf{On veut maximiser le gain d'information par le split} $ \Leftrightarrow $ minimiser $ H(Y|T) $ 
+\end{defn}
+
 
 \section{Classfieur bayesien}
 On a : 

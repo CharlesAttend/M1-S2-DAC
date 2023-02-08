@@ -1,0 +1,100 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage{graphicx}
+\usepackage[french]{babel}
+
+\usepackage[default,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb} %math
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{systeme}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    % pdfpagemode=FullScreen,
+    }
+\urlstyle{same} %\href{url}{Text}
+
+\theoremstyle{plain}% default
+\newtheorem{thm}{Théorème}[section]
+\newtheorem{lem}[thm]{Lemme}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{cor}{Corollaire}
+%\newtheorem*{KL}{Klein’s Lemma}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Définition}[section]
+\newtheorem{exmp}{Exemple}[section]
+% \newtheorem{xca}[exmp]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remarque}
+\newtheorem*{note}{Note}
+%\newtheorem{case}{Case}
+
+
+
+\title{Cours}
+\author{Charles Vin}
+\date{Date}
+
+\begin{document}
+\maketitle
+
+\section{Généralité}
+\paragraph*{Métrique}
+\begin{itemize}
+    \item Taux de reconnaissance : $ \frac{bonne pred}{total pred} $ 
+    \item Précision pour une classe $ c $: $ \frac{N^C_{correct}}{N^C_{predits}} $ 
+    \item Rappel / Recall pour une classe $ c $ : $ \frac{N^C_{correct}}{N^C_{tot}} $
+    \item F1 : need plus de vulgarisation
+    \item ROC : Faux positif VS Vrais positif
+    \item AUC : 
+\end{itemize}
+
+\paragraph*{Problème d'équilibre des classes}
+\begin{itemize}
+    \item Accuracy poubelle $\rightarrow$ Utiliser les autres metrics : AUC / ROC
+    \item Ré-équilibrer le jeux de données : supprimer des données dans la classe majoritaire 
+    \item Fonction de coût : pénaliser plus les erreurs dans la classe minoritaire (cours 1 diapo 51)
+\end{itemize}
+
+\paragraph*{Problème de dimension}
+Ajouter un terme sur la fonction coût (ou vraisemblance) pour pénaliser le nombre (ou le poids) des coefficients utilisés pour la décision. (Cours 1 diapo 50)
+
+\paragraph*{TF-IDF encoding} if word k is in most documents, it is probably useless $\rightarrow$ TF-Idf encoding : Donne plus de poids au keyword et un petit peu moins au stopword. A combiner avec blacklist
+
+\section{Bag of Word}
+
+\subsection{Stengths and drawbacks}
+Avantage : 
+\begin{itemize}
+    \item Easy light fast 
+    \item Opportunity to enrich (Context encoding, Part Of Speech)
+    \item Efficient implementation
+    \item Still very effective with classification
+\end{itemize}
+Limite : 
+\begin{itemize}
+    \item Loose document / sentence structure : mitigated with N-gram
+    \item Several task missing : POS tagging, text generation
+    \item Semantic gap : On peut pas utiliser la distance euclidienne pour mesurer la différence sémantique
+\end{itemize}
+
+\subsection{Classification}
+\paragraph*{Naive Bayes}
+Rapide, interprétable, naturellement multiclasse. Perf à améliorer. Bien filtrer les stop word. Extention par robustesse (?)
+
+\paragraph*{Classifieur linéaire}
+Scalable, attention sensible au dimension
+
+
+
+\end{document}

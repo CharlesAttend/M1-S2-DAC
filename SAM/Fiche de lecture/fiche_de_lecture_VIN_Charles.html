@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Fiche de lecture - VIN Charles</title>
+        <style>
+/* From extension vscode.github */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+.vscode-dark img[src$=\#gh-light-mode-only],
+.vscode-light img[src$=\#gh-dark-mode-only] {
+	display: none;
+}
+
+</style>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/markdown.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/Microsoft/vscode/extensions/markdown-language-features/media/highlight.css">
+<style>
+            body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', system-ui, 'Ubuntu', 'Droid Sans', sans-serif;
+                font-size: 14px;
+                line-height: 1.6;
+            }
+        </style>
+        <style>
+.task-list-item {
+    list-style-type: none;
+}
+
+.task-list-item-checkbox {
+    margin-left: -20px;
+    vertical-align: middle;
+    pointer-events: none;
+}
+</style>
+        
+    </head>
+    <body class="vscode-body vscode-light">
+        <h1 id="fiche-de-lecture---vin-charles">Fiche de lecture - VIN Charles</h1>
+<p><em>J'ai choisi de faire cette fiche en anglais pour éviter les problèmes de traduction</em></p>
+<p>The database community has been impacted by the acceleration of technological breakthroughs in machine learning and data science, the rise of data governance, the growth of managed cloud data systems, the acceleration of the Industrial Internet of Things, and hardware changes. Those advances lead to some new research challenges.</p>
+<p>I did not understand all the document but here is my top five, which are linked with our Master and with SAM and that I can relate with.</p>
+<p><strong>Data exploration and scale</strong> This point discusses the recent advances in machine learning (ML) and how they can be used to reimagine the data platform components. The focus is on auto-tuning. It is described as the way database systems can replace magic numbers and thresholds with ML models, and on exploring new approaches to query optimization or multidimensional index structures. <em>I like the idea to implement ML in database systems.</em></p>
+<p><strong>Machine learning workloads</strong> This section discusses the importance of ML in modern data management workloads and the need for database engines to support in-database inferencing/training efficiently. To support this, it also highlights the need for database systems to support popular ML programming frameworks such as Pytorch or Tensorflow. This support already exists but only for small ML models, training much bigger AI like language models will require database engine developers to cooperate with data scientists and hardware developers. <em>I never thought about the way those terabytes of data for language models were managed. I like the way the document said it will need cooperation between researchers and developers of differents fields</em></p>
+<p><strong>Distributed transactions</strong> This section addresses the challenges of processing distributed transactions in cloud data management systems, which are increasingly geo-distributed across multiple geographic regions. There is a debate between two schools of thought, one advocating for reducing consistency and isolation guarantees for high throughput, availability, and low latency, and the other advocating for strong consistency and isolation guarantees. The section emphasizes the importance of better identifying and quantifying application bugs and limitations and building tools to help application developers achieve their goals. <em>Decentralisation is on-trend and I didn't know that it still was a real problem to have distributed transactions. I think we need to address it quick</em></p>
+<p>The last two points are around data governance, metadata management and ethical data science. I'll first define those research challenges, them explain the link between them.</p>
+<ul>
+<li>Metadata management involves tracking and managing metadata related to data science experiments and ML models, including automated labelling and annotations of data and data provenance.</li>
+<li>Data governance involves the control of how data is used by applications, with the European Union's General Data Protection Regulation (GDPR) being a prime example.</li>
+<li>Ethical data science involves countering bias and discrimination in the use of data science techniques, with responsible data management emerging as a new research direction in the area of Fairness, Accountability, Transparency, and Ethics (FATE).</li>
+</ul>
+<p>I think those challenges are dependent on each other, kind of a domino effect. To improve ethical data science and data governance, we need a database system to be able to keep track of where the data comes from, especially in data lakes that seem to be described as a bit messy. That's where metadata management is involved.</p>
+
+        
+        
+    </body>
+    </html>

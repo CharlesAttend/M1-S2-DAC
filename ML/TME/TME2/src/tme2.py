@@ -37,13 +37,14 @@ class Histogramme(Density):
         """
         self.density, self.bins = np.histogramdd(x, self.steps, density=True)
         print("Fitted")
+        print(self.bins)
 
     def predict(self, x):
         """
         Retourne la densité associée à chaque point de x
         """
         def to_bin(x):
-            return np.
+            return 0
 
 
 class KernelDensity(Density):

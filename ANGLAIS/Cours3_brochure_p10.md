@@ -32,7 +32,6 @@ Right : "The artists said, in an attempt “to interrogate the power of these ne
 h- The video about Zuckenberg was removed.
 Wrong : "At the time of writing, the fake Zuckerberg video remains live."
 
-
 i- The young man who engineered the video starring Trump and Obama was excited by the deepfake technology as well as its early output.
 Right : “The technology intrigued me, but the early uses didn’t, so I tried my hand at something more wholesome,” James says over online chat.
 

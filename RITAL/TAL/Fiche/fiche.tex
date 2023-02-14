@@ -69,7 +69,28 @@
 \paragraph*{Problème de dimension}
 Ajouter un terme sur la fonction coût (ou vraisemblance) pour pénaliser le nombre (ou le poids) des coefficients utilisés pour la décision. (Cours 1 diapo 50)
 
-\paragraph*{TF-IDF encoding} if word k is in most documents, it is probably useless $\rightarrow$ TF-Idf encoding : Donne plus de poids au keyword et un petit peu moins au stopword. A combiner avec blacklist
+\paragraph*{TF-IDF encoding} if word k is in most documents, it is probably useless $\rightarrow$ TF-Idf encoding : Donne plus de poids au keyword et un petit peu moins au stopword. A combiner avec blacklist \textbf{EXPLIQUER PLUS LES MATH ?? car ça à l'air important on 'lutilise tout le temps}
+
+\paragraph*{Zipf law}
+
+
+\section{Liste des pré-processing}
+\subsection{Noisy entity removal}
+\begin{itemize}
+    \item Ponctuation, capital/lower case
+    \item Stop word 
+    \item Rare word (less than a threshold)
+\end{itemize}
+
+\subsection{Text Normalization}
+\begin{itemize}
+    \item Lemmatization : Lions $\rightarrow$ Lion, are $\rightarrow$ be
+    \item Stemming
+\end{itemize}
+
+\subsection{Word standardisation}
+Regular expression, e.g. for removing "." or expanding words’ contractions ("I’ll" → "I will")
+
 
 \section{Bag of Word}
 
@@ -95,6 +116,41 @@ Rapide, interprétable, naturellement multiclasse. Perf à améliorer. Bien filt
 \paragraph*{Classifieur linéaire}
 Scalable, attention sensible au dimension
 
+\section{Apprendre la sémantique}
+\begin{itemize}
+    \item Première approche : WordNet : trop statique (nouvelle expression, hashtag, vocab tecnique) et fait à la main 
+    \item Deuxième approche : Mesure de co-occurence : "Fair \textbf{and} legitimate", "Fair \textbf{but} brutal" $\rightarrow$ Marche bien + combo avec BoW
+\end{itemize}
 
+\section{Unsupervised approches}
+\subsection{LSA : Latent Semantic Analysis}
+On un un vocabulaire de taille $ d $, $ N $ document, une LSA avec $ k $ greatest singular values.
+
+On décompose la matrice $ X \in \mathbb{Q}^{N \times d}$ en \begin{itemize}
+    \item $ U \in \mathbb{R}^{k \times d} $ : une ligne de $ U $ représente un vecteur de poids par mot. Les poids les plus haut donne la classe du document (?)
+    \item $ \Sigma \in \mathbb{R}^{k \times k} $
+    \item $ V \in \mathbb{R}^{d \times k} $ Un colonne de $ V $ représente le champs lexical d'une classe (?). C'est les mots les plus important.
+    \item Est-ce que $ V $ et $ U $ sont pareil ?? 
+    \item Comment on classif un nouveau document la dedans ? 
+\end{itemize}
+
+\subsubsection{Stength and drawbacks}
+\begin{itemize}
+    \item Bon combo avec t-SNE.
+    \item Entièrement basé sur BoW : même problème  plus +\begin{itemize}
+        \item Not robust to stop word (=high singular values)
+        \item Problème forme négative 
+    \end{itemize}
+    \item Problème avec les mots rare dans les petits corpus (?)
+\end{itemize}
+
+\subsection{Kmean}
+Comme d'hab, à combo avec LSA pour réduire les dimensions. 
+\subsection{Dérivé LSA}
+\begin{itemize}
+    \item P-LSA : K-mean mais avec un assignement soft mesurer par la probabilité
+    \item LDA : On rajoute un prior : modèle plus complexe $\rightarrow$ Les méthodes EM  $\rightarrow$ on utilise MCMC pour estimer les vraissemblance
+    \item D'autre extension bien complexe
+\end{itemize}
 
 \end{document}

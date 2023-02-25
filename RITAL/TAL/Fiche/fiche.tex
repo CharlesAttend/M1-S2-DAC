@@ -153,4 +153,99 @@ Comme d'hab, à combo avec LSA pour réduire les dimensions.
     \item D'autre extension bien complexe
 \end{itemize}
 
+
+
+
+
+\section{Word Embeddings \& Neural network}
+{\large \begin{center}
+\textit{Word that appear in similar contexts in text tend to have similar meanings}
+\end{center}}
+
+\subsection{Words2Vec}
+
+Implémentation de l'idée précédente : Modèle auto-supervisé, input OH encoding ; + backpropagation 
+\begin{itemize}
+    \item CBoW : Predict surrounding words (context) from central word ; work well for frequent words
+    \item Skipgram : Predict context from central word ; work well for rare words
+\end{itemize}
+On note : \begin{itemize}
+    \item Soft max en sortie sur $ \left| V \right|  $ (taille du vocab) valeur $\rightarrow$ Lourd $\rightarrow$ Evitable par négative sampling je crois ??
+    \item Analogie dans l'espace latent $ H $ : Féminin/Masculin, Capitale, sémantique 
+    \item \textbf{Difficulté pour aller au delà des mots} : Comment encoder une phrase entière dans $H$ $\rightarrow$ moyenne, sommes, min, max
+\end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics*[width=.75\textwidth]{CBoW.png}
+    \caption{CBoW}
+\end{figure}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics*[width=.75\textwidth]{skipgram.png}
+    \caption{Skip-Gram}
+\end{figure}
+
+\subsubsection{Glove}
+\begin{itemize}
+    \item Input : matrice de co-occurence + accès aux word embeding
+    \item On veut explicitement que la proximité dans l'espace latent représente la co-occurence des mots
+    \item Fonction de cout et de prédiction de GloVe $ \approx  $ PLSA (espace latent pour les co-ocurences) + Contexte local + les words embeding 
+\end{itemize}
+
+\subsection{Neural Networks}
+\subsubsection{CNN}
+How to scale/classify with Word Embeding ? $\rightarrow$ Convolutional Neural networks
+\begin{enumerate}
+    \item Latent représentation of the word 
+    \item Couche de convolution
+    \item $\rightarrow$ Une représentation d'un document dans une dimension fixe
+    \item $\rightarrow$ Classication : Régréssion, NN w/ soft max, ...
+\end{enumerate}
++ une back propagation sur la layer de convolution, l'espace de représentation latent. 
+
+\textbf{Problème} : 2 mois de train 
+
+\subsubsection{RNNs}
+\begin{itemize}
+    \item Code des séquences \textbf{entière} => parfait pour du texte
+    \item Forme de mémoire du passé dans le réseau
+    \item Problème de profondeur et d'évanouissement du gradient
+\end{itemize}
+3 types de classification :
+\begin{itemize}
+    \item One to many : Image captionning (input une image, sortie plusieurs mots)
+    \item Many to one : Sentiment clasification, Question answering (how many ...)
+    \item Many to many : Text generation, translation (input anglais sortie français), speech2text 
+\end{itemize}
+Evolution : 
+\begin{itemize}
+    \item Architecture spéciale contre la disparition du gradient : LSTM, GRU == long term memory 
+    \item Bi-directionnal RNNs : incorporate information from words both preceding and following
+\end{itemize}
+Toujours problème d'évanouissement du gradient + goulot d'étranglement pour encoder tout une phrase
+
+\subsection{Attention model \& Transformers }
+\begin{itemize}
+    \item Encode l'information globale (!= CNN que local)
+    \item Matrice d'attention == encodage de \begin{itemize}
+        \item Chaque mot encodé avec Key, Query, Value
+        \item la similarité de chaque mot de la phrase
+        \item inclusion du contexte globale
+    \end{itemize} 
+    \item Multi-head attention : on stack en parallèle les self-attention layer + combinaison
+    \item Perte de la position : Fully connected layers: permutation invariant $\rightarrow$ Encodage manuel 
+\end{itemize}
+
+\subsubsection{BERT}
+Comme word2vec avec de l'attention : pré-train pour apprendre l'espace latent $\rightarrow$ Fine tune sur other task. 
+
+Token de classe CLS $t_0$ qui représente la phrase entière dans un espace latent $\rightarrow$ utile pour prédire la classe avec des modèle classique (regression ect) $\rightarrow$ \textbf{Plus le problème de W2V avec la moyenne ou la somme}
+
+\subsubsection{Transformers Decoder}
+GPT
+\begin{itemize}
+    \item Prédire le mot suivant en fonction du contexte.
+    \item Masked Attention: hide (mask) information about future tokens from the model. On donne la phrase au fur et à mesure pour pas tout apprendre d'un coup. On peut pas utiliser les mots d'après vu qu'on génère
+\end{itemize}
 \end{document}

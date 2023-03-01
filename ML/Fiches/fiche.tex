@@ -52,6 +52,9 @@
     \item Fonction de perte : quantifie l'erreur associé à une décision. Erreur simple : A chaque fois qu'on se trompe, on compte 1 : 0-1 loss
     \item Risque : Proba de se tromper, $ R(y_i | x) = \sum_{j}^{} l(y_i, y_j)P(y_j | x)$ = Moyenne de la Loss pondéré par les probas 
     \item Risque continue ? : $ R(f) = \int_{x \in \mathcal{X}}^{}R(f(x)|x)p(x) dx  $ ($ p(x) = ??? $ ) = Esperance du X sur notre domaine continue
+    \item iso-contours == courbe de niveau
+    \item Une epoque = on a vu une fois tous les exemples dans le gradient
+    \item Hinge-loss = $ \max (0, -y f_w(x)) $ 
 \end{itemize}
 
 \section{Arbre de décision}
@@ -147,7 +150,57 @@ On combine la solution précédente avec une densité/noyaux. Classiquement Gaus
 \end{defn}
 
 
+\section{Regression Linéaire}
+\begin{itemize}
+    \item MSE : $ (XW - Y)^T (XW - Y) = W^T X^T X W - (Y^T X W)^T - YXW + Y^TY $ 
+    \item \begin{align*}
+        \nabla _W MSE &= 2X^TXW - X^T Y - Y^T X  \\
+            &= 2X^TXW - X^T Y - X^TY  \text{ car } \lambda \in \mathbb{R}, \lambda ^T = \lambda \\
+            &= 2X^T (XW - Y) = 0
+            &\Leftrightarrow W = (X^TX)^{-1} X^T Y
+    \end{align*}
+    \item Sinon descente de gradiant
+\end{itemize}
 
+\section{Régression Logistique}
+\begin{itemize}
+    \item On peut pas utiliser la MSE car distance à la frontière de décision peut être très grande pour un point qui est très très très certainement dans une classe
+    \item On vas plutot essayer de modéliser la confiance qu'on a dans la classif d'un point $\rightarrow$ Proba : $ p(y=1|x) = \mu (x) $ 
+    \item Modélisation de cette proba par un truc linéaire qu'on projette entre 0 et 1 avec la sigmoide ou tanh  
+    \item On remarque que le log ratio : $ \log_{} \frac{\mu (x)}{1 - \mu (x)} = f_w(x) $ pour la sigmoide 
+    \item Pas de solution analytique à la log vraiss : descente de gradient
+\end{itemize}
 
+\section{Perceptron}
+\begin{itemize}
+    \item $ f_w(x) = x \bullet w    $ 
+    \item Hinge-loss = $ \max (0, -y f_w(x)) $, vaut 0 quand bonne prédiction
+    \item gradient Hinge loss 
+    \[
+        \nabla H_w = \begin{cases}
+        0 &\text{ si } -y x w < 0\\
+        -yx &\text{ sinon}\\
+        \end{cases} 
+    .\]
+    \item into descente de gradient
+\end{itemize}
 
+\section{SVM}
+\begin{itemize}
+    \item Donnée non linéaire $\rightarrow$ Projection, dim ++ $\rightarrow$ Attention sur apprentissage + quel dim choisir $\rightarrow$ SMV do this auto
+    \item Maximiser la marge $ \gamma  \Leftrightarrow $ minimiser $ \left\| w \right\| $ sous la contrainte $ \forall i, (wx^i + b)y^i \geq 1 $ par des calculs obscures ($ \geq 1 $ car on veut que la distance entre la droite de régression et ces deux marges soit supérieur 1)
+    \item Prise en comtpe des erreurs : \begin{itemize}
+        \item $ \xi  $ variable de débordement par rapport à sa marge pour chaque point mal classé $\rightarrow$ Raison obscure $\rightarrow \xi = \max (0, 1 - (wx^i + b) y^i) $ Hinge loss
+        \item On avait $\min ||w||²$ maintenant $\min ||w|||^2 + K \sum_{}^{}\xi $ avec $K$ hyper param nombre d'erreur
+    \end{itemize}
+    \item Optimisation avec lagrangien cas simple
+    \[
+        \begin{cases}
+        & \min _{w,b} \frac{1}{2}\left\| w \right\| ^2\\
+        &\text{s.c } y^i (wx^i + b) \geq 1\\
+        \end{cases} 
+        \Leftrightarrow L(w, b, \alpha) = \frac{1}{2} \left\| w \right\| ^2 - \sum_{i}^{}\alpha _i (y^i (wx^i + b) - 1)
+    .\]
+    
+\end{itemize}
 \end{document}

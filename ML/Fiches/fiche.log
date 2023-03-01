@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.10.2)  27 FEB 2023 19:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.10.4)  1 MAR 2023 15:35
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -447,55 +447,73 @@ LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
 LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
 (Font)              scaled to size 13.67995pt on input line 50.
 
-Overfull \hbox (16.77774pt too wide) in paragraph at lines 61--62
+Overfull \hbox (16.77774pt too wide) in paragraph at lines 64--65
 []\T1/opensans-TLF/m/n/10 Diviser les don-nées d'en-traî-ne-ment en sous-ensembles conte-nant les va-leurs pos-sibles de la meilleure
  []
 
 LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
-(Font)              scaled to size 9.49997pt on input line 66.
+(Font)              scaled to size 9.49997pt on input line 69.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
-(Font)              scaled to size 11.39996pt on input line 112.
-<./fig1.png, id=53, 666.69075pt x 346.896pt>
+(Font)              scaled to size 11.39996pt on input line 115.
+<./fig1.png, id=69, 666.69075pt x 346.896pt>
 File: ./fig1.png Graphic file (type png)
 <use ./fig1.png>
-Package pdftex.def Info: ./fig1.png  used on input line 133.
+Package pdftex.def Info: ./fig1.png  used on input line 136.
 (pdftex.def)             Requested size: 455.24411pt x 236.87068pt.
 
 
 LaTeX Font Warning: Font shape `T1/opensans-TLF/m/sc' undefined
-(Font)              using `T1/opensans-TLF/m/n' instead on input line 134.
+(Font)              using `T1/opensans-TLF/m/n' instead on input line 137.
 
-[2 <./fig1.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 153.
- [3]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 153.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
+(Font)              scaled to size 6.64998pt on input line 161.
+LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
+(Font)              scaled to size 4.74998pt on input line 161.
+[2] [3 <./fig1.png>]
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 194.
+
+LaTeX Font Info:    Trying to load font information for TS1+opensans-TLF on input line 194.
+(/usr/share/texlive/texmf-dist/tex/latex/opensans/TS1opensans-TLF.fd
+File: TS1opensans-TLF.fd 2019/06/24 Font definitions for TS1/opensans-TLF.
+)
+LaTeX Font Info:    Font shape `TS1/opensans-TLF/m/n' will be
+(Font)              scaled to size 9.49997pt on input line 194.
+
+
+LaTeX Warning: Command \texttwosuperior invalid in math mode on input line 194.
+
+Missing character: There is no ² in font cmr10!
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 206.
+[4]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 206.
  (/home/charles/M1-S2-DAC/ML/Fiches/fiche.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 153.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 153.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 206.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 206.
 Package rerunfilecheck Info: File `fiche.out' has not changed.
-(rerunfilecheck)             Checksum: 68CB1409183C3BAD204E515F16B91F03;449.
+(rerunfilecheck)             Checksum: 0A214F39CE6C9A44E7A07A159B6DA826;650.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 153.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 206.
  ) 
 Here is how much of TeX's memory you used:
- 9321 strings out of 483154
- 138217 string characters out of 5965023
- 415540 words of memory out of 5000000
- 24137 multiletter control sequences out of 15000+600000
- 543915 words of font info for 63 fonts, out of 8000000 for 9000
+ 9378 strings out of 483154
+ 139615 string characters out of 5965023
+ 418540 words of memory out of 5000000
+ 24184 multiletter control sequences out of 15000+600000
+ 545068 words of font info for 66 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 34i,6n,40p,428b,472s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/opensans/a_jg4h6q.enc}</usr/share/texlive/texmf-dist/fonts/type1/ascender/opensans/OpenSans-Bold.pfb></usr/share/texlive/texmf-dist/fonts/type1/ascender/opensans/OpenSans-Regular.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb>
-Output written on /home/charles/M1-S2-DAC/ML/Fiches/fiche.pdf (3 pages, 142548 bytes).
+ 34i,10n,40p,428b,496s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/opensans/a_jg4h6q.enc}</usr/share/texlive/texmf-dist/fonts/type1/ascender/opensans/OpenSans-Bold.pfb></usr/share/texlive/texmf-dist/fonts/type1/ascender/opensans/OpenSans-Regular.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on /home/charles/M1-S2-DAC/ML/Fiches/fiche.pdf (4 pages, 157816 bytes).
 PDF statistics:
- 105 PDF objects out of 1000 (max. 8388607)
- 87 compressed objects within 1 object stream
- 19 named destinations out of 1000 (max. 500000)
- 68 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 130 PDF objects out of 1000 (max. 8388607)
+ 109 compressed objects within 2 object streams
+ 24 named destinations out of 1000 (max. 500000)
+ 100 words of extra memory for PDF output out of 10000 (max. 10000000)
 

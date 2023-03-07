@@ -54,7 +54,10 @@
     \item Risque continue ? : $ R(f) = \int_{x \in \mathcal{X}}^{}R(f(x)|x)p(x) dx  $ ($ p(x) = ??? $ ) = Esperance du X sur notre domaine continue
     \item iso-contours == courbe de niveau
     \item Une epoque = on a vu une fois tous les exemples dans le gradient
-    \item Hinge-loss = $ \max (0, -y f_w(x)) $ 
+    \item Hinge-loss = $ \max (0, 1 - y f_w(x)) $ \begin{itemize}
+        \item the Hinge loss penalizes predictions y < 1, corresponding to the notion of a margin in a support vector machine.
+        \item When $ y $ and $ f_w(x) $ have the same sign (meaning y predicts the right class) and $ \left| f_w(x) \right| \geq 1 $ , the hinge loss $ = 0 $  When they have opposite signs, the hinge loss increases linearly with $ f_w(x) $  and similarly if $ \left| f_w(x) \right| \geq 1 $, even if it has the same sign (correct prediction, but not by enough margin).
+    \end{itemize}
 \end{itemize}
 
 \section{Arbre de décision}
@@ -93,7 +96,6 @@ On a :
 \begin{itemize}
     \item $ P(y) $ fréquence des classe dans le dataset
     \item $ P(x|y) $ les points de notre jeux de donnée. Graphiquement : les points coloriés
-    \item 
 \end{itemize}
 On cherche : 
 \[
@@ -109,7 +111,11 @@ Remarque :
     \item Classifier optimal car minimise l'erreur car en choisissant la plus grande proba, on peut pas réduire $ 1 - P(y | x) $ qui est déjà le plus grand possible  
     \item $ P(x) $ difficile à calculer = répartition des points dans l'espace, dans le graph 2d non colorié. En général très petit, uniquement utile pour générer des données, pas pour faire l'argmax (aka classifier).
 \end{itemize}
-
+Autre truc important : 
+\begin{itemize}
+    \item On utilise classiquement une 0-1 loss
+    \item Frontière de décision : $ \frac{R(+|x)}{R(-|x)} > 1 $  $\rightarrow$ Permet de prendre en compte les coûts asymétriques des classes
+\end{itemize}
 \section{Estimation de densité}
 \subsection{Par histogramme}
 
@@ -157,7 +163,7 @@ On combine la solution précédente avec une densité/noyaux. Classiquement Gaus
             &= 2X^T (XW - Y) = 0 \\
             &\Leftrightarrow W = (X^TX)^{-1} X^T Y
     \end{align*}
-    \item Sinon descente de gradiant
+    \item Sinon descente de gradient
 \end{itemize}
 
 \section{Régression Logistique}
@@ -182,16 +188,23 @@ On combine la solution précédente avec une densité/noyaux. Classiquement Gaus
     .\]
     \item into descente de gradient
 \end{itemize}
-Théoreme de convergence
+Théorème de convergence : si
+\begin{itemize}
+    \item $ \exists R, \forall x \left\| x \right\| \leq R $ 
+    \item Les données peuvent être séparées avec une marge p
+    \item L'ensemble d'apprentissage est présenté au perceptron un nombre suffisant
+    de fois
+\end{itemize}
+Alors : après au plus $ \frac{R^2}{p^2} $ correction, l'algo converge
 
 
 \section{SVM}
 \begin{itemize}
     \item Donnée non linéaire $\rightarrow$ Projection, dim ++ $\rightarrow$ Attention sur apprentissage + quel dim choisir $\rightarrow$ SMV do this auto
     \item Maximiser la marge $ \gamma  \Leftrightarrow $ minimiser $ \left\| w \right\| $ sous la contrainte $ \forall i, (wx^i + b)y^i \geq 1 $ par des calculs obscures ($ \geq 1 $ car on veut que la distance entre la droite de régression et ces deux marges soit supérieur 1)
-    \item Prise en comtpe des erreurs : \begin{itemize}
+    \item Prise en compte des erreurs : \begin{itemize}
         \item $ \xi  $ variable de débordement par rapport à sa marge pour chaque point mal classé $\rightarrow$ Raison obscure $\rightarrow \xi = \max (0, 1 - (wx^i + b) y^i) $ Hinge loss
-        \item On avait $\min ||w||²$ maintenant $\min ||w|||^2 + K \sum_{}^{}\xi $ avec $K$ hyper param nombre d'erreur
+        \item On avait $\min ||w||^2$ maintenant $\min ||w|||^2 + K \sum_{}^{}\xi $ avec $K$ hyper param nombre d'erreur
     \end{itemize}
     \item Optimisation avec lagrangien cas simple
     \[

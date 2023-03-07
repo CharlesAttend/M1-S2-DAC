@@ -1,0 +1,29 @@
+F - 
+V - car de Str -> R + représente bien une forme de similarité entre deux chaines de caractères
+V - Cours diapo 26
+F - ? 
+F - on transforme juste la frontière linéaire entre 0 et 1
+V - Semble correcte pour les même raisons que précédement mais en même temps je me vois mal l'écrire sous la forme d'un produit scalaire
+F - Car il est naif, il suppose l'indépendance entre les dimensions de X ?
+F - c'est l'inverse de la def du noyaux ?
+? - KNN
+F - On apprends un min local 
+F- il faut regarder les capacité de généralisation sur le test
+F - Non on somme les espérances aussi
+? - VC-Dimension ? 
+? - VC-dim ? 
+? - Boosting
+? - VC-Dim
+? - Awa 
+V - Ridge regression
+F - Cov = 0 != indépendance
+F - Loi jointe de deux gaussiennes n'est pas gaussiene sauf en cas d'indépendance des variables 
+? - Pas compris la question
+V - Pas de gain d'information de l'une pour l'autre si elle sont identique ? Mouaiiss
+?
+? 
+? - Pouahh compliqué pour R, je dirai vrais mais pas sur
+? - ouais d'akor
+? - mais wtf
+??
+?? 

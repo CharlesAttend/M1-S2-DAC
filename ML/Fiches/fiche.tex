@@ -50,7 +50,7 @@
 \section{Généralité}
 \begin{itemize}
     \item Fonction de perte : quantifie l'erreur associé à une décision. Erreur simple : A chaque fois qu'on se trompe, on compte 1 : 0-1 loss
-    \item Risque : Proba de se tromper, $ R(y_i | x) = \sum_{j}^{} l(y_i, y_j)P(y_j | x)$ = Moyenne de la Loss pondéré par les probas 
+    \item Risque : Proba de se tromper, $ R(y_i | x) = \sum_{j}^{} l(y_i, y_j)P(y_j | x)$ = Moyenne de la Loss pondéré par les probas à post
     \item Risque continue ? : $ R(f) = \int_{x \in \mathcal{X}}^{}R(f(x)|x)p(x) dx  $ ($ p(x) = ??? $ ) = Esperance du X sur notre domaine continue
     \item iso-contours == courbe de niveau
     \item Une epoque = on a vu une fois tous les exemples dans le gradient
@@ -88,7 +88,6 @@ Méthode de division des données : On vas utiliser l'entropie
     \textbf{On veut maximiser le gain d'information par le split} $ \Leftrightarrow $ minimiser $ H(Y|T) $ 
 \end{defn}
 
-
 \section{Classfieur bayesien}
 On a : 
 \begin{itemize}
@@ -102,12 +101,12 @@ On cherche :
 .\]
 Par indépendance des dimensions de $ x $, on peut parfois  développer le $ P(x|y) = P(x_1|y) \dots P(x_d|y) $.
 
-Puis rapport de vraisemblance pour prendre la décision.
+Puis rapport de vraisemblance \textbf{en utilisant le risque} pour prendre la décision.
 
 Remarque : 
 \begin{itemize}
     \item Classifier bayésien = le classifier qui minimise le risque = le meilleurs classifieur possible
-    \item Classfier optimal car minimise l'erreur car en choisissant la plus grande proba, on peut pas réduire $ 1 - P(y | x) $ qui est déjà le plus grand possible  
+    \item Classifier optimal car minimise l'erreur car en choisissant la plus grande proba, on peut pas réduire $ 1 - P(y | x) $ qui est déjà le plus grand possible  
     \item $ P(x) $ difficile à calculer = répartition des points dans l'espace, dans le graph 2d non colorié. En général très petit, uniquement utile pour générer des données, pas pour faire l'argmax (aka classifier).
 \end{itemize}
 
@@ -121,11 +120,11 @@ Remarque :
     \end{itemize}
 \end{defn}
 Importance de la discrétisation : \begin{itemize}
-    \item Petit $\rightarrow$ sur-apprentissage, 
+    \item Petit $\rightarrow$ sur-apprentissage, trou dans l'histogramme
     \item Trop grand $\rightarrow$ sous-apprentissage
 \end{itemize}
 Limite : \begin{itemize}
-    \item Grande dimention $\rightarrow$ Perte de sens exponentiel (3 ou 4 max)
+    \item Grande dimension $\rightarrow$ Perte de sens exponentiel (3 ou 4 max)
     \item Effet de bord : petit changement dans les bins, gros changement d'estimation. 
 \end{itemize}
 $\rightarrow$ Solution : Estimation par noyaux
@@ -149,14 +148,13 @@ On combine la solution précédente avec une densité/noyaux. Classiquement Gaus
     Avec $ K $ le noyaux \textbf{centrée et réduit sur $ x $ }, souvent une fonction gaussienne. Si c'est une fonction rectangle ça fonctionne aussi. Puis y'a plein d'autre noyaux possible.
 \end{defn}
 
-
 \section{Regression Linéaire}
 \begin{itemize}
     \item MSE : $ (XW - Y)^T (XW - Y) = W^T X^T X W - (Y^T X W)^T - YXW + Y^TY $ 
     \item \begin{align*}
         \nabla _W MSE &= 2X^TXW - X^T Y - Y^T X  \\
             &= 2X^TXW - X^T Y - X^TY  \text{ car } \lambda \in \mathbb{R}, \lambda ^T = \lambda \\
-            &= 2X^T (XW - Y) = 0
+            &= 2X^T (XW - Y) = 0 \\
             &\Leftrightarrow W = (X^TX)^{-1} X^T Y
     \end{align*}
     \item Sinon descente de gradiant
@@ -184,6 +182,8 @@ On combine la solution précédente avec une densité/noyaux. Classiquement Gaus
     .\]
     \item into descente de gradient
 \end{itemize}
+Théoreme de convergence
+
 
 \section{SVM}
 \begin{itemize}

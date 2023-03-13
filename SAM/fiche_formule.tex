@@ -1,0 +1,145 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, margin=1.27cm]{geometry}
+\usepackage{graphicx}
+\usepackage[french]{babel}
+
+\usepackage[default,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb} %math
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{systeme}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    % pdfpagemode=FullScreen,
+    }
+\urlstyle{same} %\href{url}{Text}
+
+\theoremstyle{plain}% default
+\newtheorem{thm}{Théorème}[section]
+\newtheorem{lem}[thm]{Lemme}
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem*{cor}{Corollaire}
+%\newtheorem*{KL}{Klein’s Lemma}
+
+\theoremstyle{definition}
+\newtheorem{defn}{Définition}[section]
+\newtheorem{exmp}{Exemple}[section]
+% \newtheorem{xca}[exmp]{Exercise}
+
+\theoremstyle{remark}
+\newtheorem*{rem}{Remarque}
+\newtheorem*{note}{Note}
+%\newtheorem{case}{Case}
+
+
+
+\title{Fiche formule SAM}
+\author{Aymeric Delefosse, LaTeX by Charles}
+
+\begin{document}
+\maketitle
+\begin{itemize}
+    \item Parcours séquentiel d'une table $ R $, Lecture séquentielle : \textit{TABLE ACCESS FULL} 
+    \[
+        P(R) = \frac{card(R)}{T_{page} / largeur(R)} = \frac{card(R)}{a}
+    .\]
+    avec $ T_{page} = $ taille d'une page en octets et $ a $ nombre de n-uplet de R dans \textbf{une} page
+    \[
+        cout(R) = P(R) * c
+    .\]
+    avec $ c = \begin{cases}
+    c < 1  &\text{ si page contigues } (= 0.27) \text{ avec Oracle}\\
+    1 &\text{ sinon }\\
+    \end{cases}  $ 
+    \item Selection $ \sigma  $ : \begin{itemize}
+        \item Si $ E $ est une expression composé : $ cout(\sigma _{p(A)}) = cout(E) $
+        \item Si $ T $ table et $ A $ pas indexé : $ cout(\sigma _{p(A)}(T)) = P(T) $ 
+    \end{itemize}
+    \item Sélection index non plaçant 
+    \[
+        cout(\sigma _{p(A)(R)}) = C_{index} + C_{rowid} + card(\sigma _{p(A)}(R)) * \frac{CF}{card(R)}
+    .\]
+    Avec \begin{align*}
+        C_{index} &= \begin{cases}
+        0 &\text{ si l'index tient en mémoire}\\
+        \text{Hauteur de l'arbre } - 1 &\text{ sinon}\\
+        \end{cases} \\
+        C_{rowid} &= \begin{cases}
+        0 &\text{ si index unique scan} \\
+        \left\lceil \frac{card(\sigma _{p(A)(R)})}{card(R)} * nbPage \right\rceil &\text{ si index range scan}\\
+        \end{cases} \\
+        CF &= \frac{card(R)}{N/P} \text{ où } N \text{ rowid font référence à } P \text{ page à lire}
+    \end{align*}
+    Cas général : $ cout(\sigma _{p(A)}(R)) = card(\sigma _{p(A)}(R)) $ 
+    \item Sélection index plaçant \begin{align*}
+        cout(\sigma _{p(A)}(R)) &= \left\lceil P(R) * SF(p(A))\right\rceil \\
+            &= P(R) * \frac{card(\sigma _{p(A)}(R))}{card(R)}
+    \end{align*}
+    \item Jointure par boucle imbriquées \begin{itemize}
+        \item Index : 
+        \[
+            cout(R \bowtie _{r.a = s.a} S) = cout(R) + card(R) * cout(\sigma _{a=v} (S))
+        .\]
+        Avec 
+        \[
+            cout(\sigma _{a=v} (S)) = \begin{cases}
+            1 &\text{ si a est une clé de S}\\
+            C_{rowid} + card(\sigma _{a=v}(S)) * \frac{CF}{card(S)} &\text{ si index non plaçant}\\
+            \left\lceil P(S) * SF(a=v) \right\rceil  &\text{ si index plaçant}\\
+            \end{cases} 
+        .\]
+        \item Table sans index : $ cout(R \bowtie S) = cout(R) + P(R)* P(S) $ 
+        \item Si $ S $ est une expression : $ cout(R \bowtie S) = cout(S) + P(S) + cout(R) + P(R)*P(S) $
+    \end{itemize}
+    
+    \item Jointure par hachage : HP $ P(R) \geq P(S) $
+    \[
+        cout(R \bowtie S) = cout(S) + cout(R)
+    .\]
+    \item Joiture par hachage externe, si $ S $ ne tient pas en mémoire 
+    \[
+        cout(R \bowtie S) = 2 \left\lfloor \log_{K}(P(S)) \right\rfloor (P(R) + P(S)) + P(R) + P(S)
+    .\]
+    avec $ tailleMemoire = K + 1 $ pages 
+    \item Tri externe (merge-sort) avec $ s = \left\lceil \log_{K} (P(R)) \right\rceil  $ tel que $ K^s \geq P(R) $  \begin{itemize}
+        \item Si $ E \neq  $ table : $ cout(tri(E)) = cout(E) + 2P(E)(s-1) $ 
+        \item Si on ne matérialise pas le résultat (lecture seulement) : $ cout(tri(R)) = 2 P(R)(s-1) + P(R) $ 
+        \item Cout total : $ cout(tri(R)) = 2 P(R) * s$ 
+    \end{itemize}
+    
+    \item Cardinalité d'une sélection 
+    \[
+        card(\sigma _{p(A) (R)}) = SF(p(A)) * card(R)
+    .\]
+    \begin{itemize}
+        \item Si égalité : $ SF(p(A)) = \frac{nbval}{D(R,A)} $ avec $ D(R,A) $ nombre de valeur distinctes ($ = \pi _A (R)$ )
+        \item Si inégalité : $ SF(p(A)) = \frac{longeurSegment}{L(A)} = \frac{longeurSegment}{max(A) - min(A)}$ où avec $ A \in [\min (A), \max (A)] $ 
+        \[
+            longeursSegment = \begin{cases}
+                v - \min A &\text{ si } A < v\\
+                \max A - v &\text{ si } A > v\\
+                v_2 - v_1 &\text{ si } A \geq v \text{ et } A \leq v_2 \\
+                \max A - v_2 + v_1 - \min A &\text{ si } A \leq v_1 \text{ ou } A \geq v_2 \\
+                \end{cases}  
+        .\]
+    \end{itemize}
+    \item Selection sur plusieurs attributs \begin{itemize}
+        \item $ SF(p(A) \text{ et } p(B)) = SF(p(A)) * SF(p(B)) $ 
+        \item $ SF(p(A) \text{ ou } p(B)) = SF(p(A)) + SF(p(B)) - SF(p(A)) * SF(p(B)) $
+        \item $ SF(non(p(A))) = 1 - SF(p(A)) $ 
+    \end{itemize}
+    \item Cardinalité jointure \begin{itemize}
+        \item Table classique : $ card(R \bowtie_A S) = card(S)* \frac{card(R)}{D(entity, A)} $ avec entité = table avec primary key, la fraction vaut $ 1 $ si jointure naturel ($ \Leftrightarrow $ pour chaque tuple de $ r.A $ il existe un et un seul tuple $ s.A $)
+        \item Entre deux selection : $ card(\sigma _{p(A)} (R) \bowtie _A \sigma _{p(B)} (S)) = SF(p(A)) * SF(p(B)) * card(R \bowtie _A S) $ 
+    \end{itemize}
+\end{itemize}
+
+\end{document}

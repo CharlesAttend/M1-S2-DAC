@@ -60,7 +60,25 @@
     \end{itemize}
     \item Lorsque les données sont de petites dimensions, le risque de sur-apprentissage est plus petit.
     \item Lors d'une batch de gradient, il n'est pas nécessaire de mélanger les exemples car tous les exemples sont utilisés dans chaque mise à jour de poids. VS En général, il est recommandé de mélanger les exemples lors d'une descente de gradient stochastique (SGD) afin de garantir une convergence plus rapide et une meilleure généralisation.
+    \item $ \left\| x \right\|^2 = x^T x $ 
 \end{itemize}
+
+\subsection{Descente de gradient}
+Point initial $ x_0 $ et $ \epsilon \geq 0 $.
+\begin{enumerate}
+    \item Calcul de $ \nabla f(x_k) $ 
+    \item Test d'arret : si $ \left\| \nabla f(x_k) \right\| \leq \epsilon  $ 
+    \item Calcul d'un pas $ \alpha _k > 0 $ par une règle de recherche linéaire en $ f $ en $ x_k $ le long de la direction $ - \nabla f(x_k) $ 
+    \item Nouvel itéré : $ x_{k+1} = x_k - \alpha _k \nabla f(x_k) $ 
+\end{enumerate}
+
+\subsection{Dérivé des matrices}
+\begin{align*}
+    \frac{\partial (vMv)}{\partial v} &= (M + M^T)V = 2MV \text{ si } M \text{ symétrique} \\
+    \frac{\partial (v^T a)}{\partial v} &= \frac{\partial (a^T v)}{\partial v} = a \\
+    \frac{\partial (\log_{} \det M)}{\partial v} &= M^{-1}\\
+    \frac{\partial (Tr(AM))}{\partial v} &= A
+\end{align*}
 
 \section{Arbre de décision}
 Algo général : 
@@ -110,7 +128,7 @@ On cherche :
 \[
     \arg \max _y P(y|x) = \arg \max _y \frac{P(x|y) P(y)}{P(x)}
 .\]
-Par indépendance des dimensions de $ x $, on peut parfois  développer le $ P(x|y) = P(x_1|y) \dots P(x_d|y) $.
+Naive Bayes : indépendance des dimensions de $ x $, on peut développer le $ P(x|y) = P(x_1|y) \dots P(x_d|y) $.
 
 Puis rapport de vraisemblance \textbf{en utilisant le risque} pour prendre la décision.
 
@@ -123,14 +141,16 @@ Remarque :
 Autre truc important : 
 \begin{itemize}
     \item On utilise classiquement une 0-1 loss
-    \item Frontière de décision : $ \frac{R(+|x)}{R(-|x)} > 1 $  $\rightarrow$ Permet de prendre en compte les coûts asymétriques des classes
+    \item Frontière de décision : $ \frac{R(+|x)}{R(-|x)} > 1 $  $\rightarrow$ Permet de prendre en compte les coûts asymétriques des classes. Forme dans $ \mathbb{R}^2 $ : cercle
 \end{itemize}
+
 \section{Estimation de densité}
 \subsection{Par histogramme}
 
 \begin{defn}[Estimation par histogramme]
+    Soit $ Y $ une v.a.r nombre de point tombant dans un bin : $ Y \sim \mathcal{B}(n, p_b V)$. On a donc $ E(Y) = n p_b V \Leftrightarrow p_b = \frac{k}{nV} $. 
     \begin{itemize}
-        \item Cas discret : Comptage dans chaque classe puis normalisation par le nombre d'exemple $ N $ 
+        \item Cas discret : Comptage dans chaque classe puis normalisation par le nombre d'exemple $ N $ $\rightarrow p_b = \frac{k}{nV} = \frac{\text{Nb dans le bin}}{\text{nb d'ech tot }*\text{ Volume d'un bin}}$,
         \item Cas continue : Discrétisation des valeurs puis comptage et normalisation
     \end{itemize}
 \end{defn}
@@ -186,7 +206,7 @@ On combine la solution précédente avec une densité/noyaux. Classiquement Gaus
 
 \section{Perceptron}
 \begin{itemize}
-    \item $ f_w(x) = x \bullet w    $ 
+    \item $ f_w(x) = <x, w> $, décision : $ sign(f_w(x)) $  
     \item Hinge-loss = $ \max (0, -y f_w(x)) $, vaut 0 quand bonne prédiction
     \item gradient Hinge loss 
     \[
@@ -196,6 +216,7 @@ On combine la solution précédente avec une densité/noyaux. Classiquement Gaus
         \end{cases} 
     .\]
     \item into descente de gradient
+    \item le vecteur de poids $ w $ est normal à l'hyperplans de la séparatrice, $ <w, x> $ mesure l'angle entre les deux vecteurs, maj : on fait bouger l'hyperpaln en fct de cette angle 
 \end{itemize}
 Théorème de convergence : si
 \begin{itemize}
@@ -210,6 +231,7 @@ Alors : après au plus $ \frac{R^2}{p^2} $ correction, l'algo converge
 \section{SVM}
 \begin{itemize}
     \item Donnée non linéaire $\rightarrow$ Projection, dim ++ $\rightarrow$ Attention sur apprentissage + quel dim choisir $\rightarrow$ SMV do this auto
+    \item Résous le problème de l'unicité de la solution également
     \item Maximiser la marge $ \gamma  \Leftrightarrow $ minimiser $ \left\| w \right\| $ sous la contrainte $ \forall i, (wx^i + b)y^i \geq 1 $ par des calculs obscures ($ \geq 1 $ car on veut que la distance entre la droite de régression et ces deux marges soit supérieur 1)
     \item Prise en compte des erreurs : \begin{itemize}
         \item $ \xi  $ variable de débordement par rapport à sa marge pour chaque point mal classé $\rightarrow$ Raison obscure $\rightarrow \xi = \max (0, 1 - (wx^i + b) y^i) $ Hinge loss
@@ -224,9 +246,22 @@ Alors : après au plus $ \frac{R^2}{p^2} $ correction, l'algo converge
         \Leftrightarrow L(w, b, \alpha) = \frac{1}{2} \left\| w \right\| ^2 - \sum_{i}^{}\alpha _i (y^i (wx^i + b) - 1)
     .\]
 \end{itemize}
+Kernel Tricks : 
+\begin{itemize}
+    \item Kernel Function : $ k(x,y) = <\phi (x), \phi(y)> $
+    \item Mesure la similarité entre 2 objets \begin{itemize}
+        \item -- = vecteur opposé = éloigné
+        \item = 0 = produit orthogonal = éloigné 
+        \item ++ = vecteur aligné = proche
+    \end{itemize}
+    \item Stable pas addition, multiplication, composition avec $ f $ polynome, exponentiel
+    \item La dimensionnalité de la projection et la complexité de calcul d'un noyau polynomial est linéaire par rapport $d$ le degré du polynome.
+    \item 
+\end{itemize}
+
 Généralité SVM 
 \begin{itemize}
-    \item La dimensionnalité de la projection et la complexité de calcul d'un noyau polynomial est linéaire par rapport $d$ le degré du polynome.
+    
     \item  The support vectors are the data points that lie on the margin, which is the region between the decision boundary and the closest data points of each class. Support vectors are critical in SVM because they determine the location and orientation of the decision boundary. All other data points that are not support vectors are not used to construct the decision boundary, which means that SVM is robust to noise and outliers in the data.
     \item La taille de la marge est un hyper-paramètre important : marge grande == underfitting // marge petite == overfitting (séparation linéaire plus proche des points, moins centrée)
 \end{itemize}

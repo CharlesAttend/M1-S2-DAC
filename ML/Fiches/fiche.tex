@@ -80,6 +80,20 @@ Point initial $ x_0 $ et $ \epsilon \geq 0 $.
     \frac{\partial (Tr(AM))}{\partial v} &= A
 \end{align*}
 
+\subsection{Multiplicateur de Lagrange}
+Soit $ f(x) $ fonction à optimiser, sous $ g(x) = 0 $ contraintes d'égalités. On pose : $ \mathcal{L}(x,\lambda) = f(x) - \lambda  (x)$ nouvelle fonction de plus grande dimension à optimiser comme on a l'habitude en annulant le gradient : $ \nabla _x \mathcal{L}(x,\lambda ) = 0 $. Légitiment on doit vérifier si le point est un min ou un max ou un point selle avec la matrice hessienne mais osef.
+
+\subsection{KKT \& contrainte d'inégalité}
+Version complete de Lagrange : Fonction objectif $ f $, $ g_i $ contrainte d'égalité, $ h_j $ contrainte d'inégalité tel que $ h_i(x) \leq 0 $. Fonction duale : $ \mathcal{L} (x, \lambda , \mu) = f(x) - \sum_{i=1}^{p} \lambda _i g_i(x) - \sum_{j=1}^{q} \mu _j h_j(x)$. Les condition KKT pour un point $ x^* $ extremum sont (aka résoudre le système)
+\[
+    \begin{cases}
+    \nabla \mathcal{L}(x^*, \lambda^* , \mu^* ) = 0 \\
+    \mu ^*_j \leq 0, j = 1, \dots, q \\
+    \mu ^*_j h_j(x^*) = 0, j =1, \dots, q
+    \end{cases} 
+.\]
+
+
 \section{Arbre de décision}
 Algo général : 
 \begin{enumerate}
@@ -245,6 +259,15 @@ Alors : après au plus $ \frac{R^2}{p^2} $ correction, l'algo converge
         \end{cases} 
         \Leftrightarrow L(w, b, \alpha) = \frac{1}{2} \left\| w \right\| ^2 - \sum_{i}^{}\alpha _i (y^i (wx^i + b) - 1)
     .\]
+    \item Optimisation avec Langrangien cas complexe 
+    \item \begin{align*}
+        &\begin{cases}
+            &\min _{w,b} \frac{1}{2}\left\| w \right\| ^2 + K \sum_{i}^{}\xi _i \\
+            &\text{s.c. } y^i (wxî + b) \geq 1 - \xi _i, \xi _i \geq 0 \\
+        \end{cases} \\ 
+        &\Leftrightarrow \mathcal{L}(w, b, \alpha , \nu ) = \frac{1}{2}\left\| w \right\| ^2 + K \sum_{i}^{} \xi _i - \sum_{i}^{}\alpha _i (y^i(w x î + b) + \xi _i - 1) - \sum_{i}^{}\nu _i \xi _i 
+    \end{align*}
+        
 \end{itemize}
 Kernel Tricks : 
 \begin{itemize}
@@ -255,7 +278,7 @@ Kernel Tricks :
         \item ++ = vecteur aligné = proche
     \end{itemize}
     \item Stable pas addition, multiplication, composition avec $ f $ polynome, exponentiel
-    \item La dimensionnalité de la projection et la complexité de calcul d'un noyau polynomial est linéaire par rapport $d$ le degré du polynome.
+    \item La complexité de calcul d'un noyau polynomial est linéaire par rapport $d$ le degré du polynome. Mais pas la dimensionnalité de la projection
     \item 
 \end{itemize}
 

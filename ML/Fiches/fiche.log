@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.10.4)  16 MAR 2023 10:03
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.10.4)  16 MAR 2023 12:41
 entering extended mode
  \write18 enabled.
  file:line:error style messages enabled.
@@ -452,49 +452,67 @@ LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
 (Font)              scaled to size 6.64998pt on input line 81.
 LaTeX Font Info:    Font shape `T1/opensans-TLF/m/n' will be
 (Font)              scaled to size 4.74998pt on input line 81.
-LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
-(Font)              scaled to size 9.49997pt on input line 92.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-<./fig1.png, id=83, 666.69075pt x 346.896pt>
+LaTeX Font Info:    Font shape `T1/opensans-TLF/b/n' will be
+(Font)              scaled to size 9.49997pt on input line 106.
+ [2]
+<./fig1.png, id=98, 666.69075pt x 346.896pt>
 File: ./fig1.png Graphic file (type png)
 <use ./fig1.png>
-Package pdftex.def Info: ./fig1.png  used on input line 170.
+Package pdftex.def Info: ./fig1.png  used on input line 184.
 (pdftex.def)             Requested size: 525.23764pt x 273.2932pt.
 
 
 LaTeX Font Warning: Font shape `T1/opensans-TLF/m/sc' undefined
-(Font)              using `T1/opensans-TLF/m/n' instead on input line 171.
+(Font)              using `T1/opensans-TLF/m/n' instead on input line 185.
 
-[2] [3 <./fig1.png>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 268.
- [4]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 268.
+[3 <./fig1.png>]
+
+LaTeX Warning: Command \^ invalid in math mode on input line 269.
+
+Missing character: There is no î in font cmr10!
+
+LaTeX Warning: Command \^ invalid in math mode on input line 269.
+
+Missing character: There is no î in font cmr10!
+
+LaTeX Warning: Command \^ invalid in math mode on input line 269.
+
+Missing character: There is no î in font cmr10!
+
+LaTeX Warning: Command \^ invalid in math mode on input line 269.
+
+Missing character: There is no î in font cmr10!
+[4]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 291.
+ [5]
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 291.
  (/home/charles/M1-S2-DAC/ML/Fiches/fiche.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 268.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 268.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 291.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 291.
 Package rerunfilecheck Info: File `fiche.out' has not changed.
-(rerunfilecheck)             Checksum: 68574CC3CB608E47A753F3E7398ED784;834.
+(rerunfilecheck)             Checksum: 1DECBBC1574FFA3456305F926391795D;997.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 268.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 291.
  ) 
 Here is how much of TeX's memory you used:
- 9344 strings out of 483154
- 138486 string characters out of 5965023
- 418557 words of memory out of 5000000
- 24146 multiletter control sequences out of 15000+600000
+ 9349 strings out of 483154
+ 138552 string characters out of 5965023
+ 421557 words of memory out of 5000000
+ 24148 multiletter control sequences out of 15000+600000
  545125 words of font info for 66 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 34i,10n,40p,507b,488s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 34i,16n,40p,507b,563s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texlive/texmf-dist/fonts/enc/dvips/opensans/a_jg4h6q.enc}</usr/share/texlive/texmf-dist/fonts/type1/ascender/opensans/OpenSans-Bold.pfb></usr/share/texlive/texmf-dist/fonts/type1/ascender/opensans/OpenSans-Regular.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on /home/charles/M1-S2-DAC/ML/Fiches/fiche.pdf (4 pages, 175608 bytes).
+Output written on /home/charles/M1-S2-DAC/ML/Fiches/fiche.pdf (5 pages, 179719 bytes).
 PDF statistics:
- 153 PDF objects out of 1000 (max. 8388607)
- 131 compressed objects within 2 object streams
- 32 named destinations out of 1000 (max. 500000)
- 124 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 165 PDF objects out of 1000 (max. 8388607)
+ 142 compressed objects within 2 object streams
+ 35 named destinations out of 1000 (max. 500000)
+ 140 words of extra memory for PDF output out of 10000 (max. 10000000)
 

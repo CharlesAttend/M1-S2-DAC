@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="17" class="java.beans.XMLDecoder">
+<java version="17.0.6" class="java.beans.XMLDecoder">
  <object class="java.util.ArrayList">
   <void method="add">
    <object class="workbench.sql.macros.MacroGroup" id="MacroGroup0">
@@ -114,7 +114,7 @@ ${current_statement}$
 ;
 
 select plan_table_output
-from table(dbms_xplan.display(&apos;plan_table&apos;, null, &apos;basic +rows +predicate +projection +bytes +cost&apos;));
+from table(dbms_xplan.display(&apos;plan_table&apos;, null, &apos;all&apos;));
 
 delete plan_table;
 

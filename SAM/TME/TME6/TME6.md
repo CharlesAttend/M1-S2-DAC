@@ -319,31 +319,25 @@ Cette fois ci on demande au site distant de traiter entièrement la requete puis
 # Exercice 4
 Il y a plusieurs possibilité. La plus optimisé à mon gout est la suivante.
 
-```mermaid
-Client[("Client@S1")] --- Selection("Selection@S1(pays = 13)")
-Selection --- Jointure("Jointure@S1")
+## Solution 1
+![](mermaid-diagram-2023-04-05-201044.svg)
+Ici les flèches représentent un transfert entre deux machines
+- `Transfert 1` : Premier transfert de `numCommande` uniquement afin de selectionner uniquement les pays numéro 13. 
+- `Transfert 2` : Retour des `numClient` du pays 13 uniquement vers la machine distante afin de pouvoir envoyer les commentaires (lourds) uniquement du pays 13
+- `Transfert 3` : Le transfert des commentaire uniquement nécéssaire à la jointure vers la machine local
+La première jointure est pourait être faite sur la machine distante, évitant l'aller retour des `numClient` entre les deux machine. 
+Mais cela nécéssiterait le transfert de l'entiéreté des `numClient`, ce qui me semble plus lourds que deux transferts des `numClient` de Juillet 1980 uniquement.
 
-Jointure --- Projection("Projection(numclient)")
-Projection --> Jointure2("Jointure@ora10")
-Commande98[("Commande98@S2")] --> Jointure2
-
-Jointure2 --- Projection2("Projection(Commentaire)")
-Projection2 --> Jointure3("Jointure@ora11")
-Jointure -->Jointure3
-
-Commande98[("Commande98@S2")] --> Jointure
-```
-
-En SQL on a tout d'abord la défition de la vue sur nos deux machines
+En SQL on a tout d'abord la défition de la vue sur la machine distante
 ```sql
-CREATE VIEW CommentairePays13 AS 
-    SELECT profile, commentaire
-    FROM COMMANDE98 FAUXXXXXXX A REFAIRE
-    WHERE CL.NUMPAYS=13;
+CREATE VIEW COMMANDE13 AS 
+SELECT cl.profile, co.commentaire
+    FROM CLIENT@SITEORIGINAL.fr CL, COMMANDE98 CO 
+    WHERE CL.NUMCLIENT=CO.NUMCLIENT AND CL.NUMPAYS=13;
 ```
 et sur @ora11
 ```sql
-CREATE VIEW CommentairePays13 AS 
+CREATE VIEW CommenCOMMANDE13tairePays13 AS 
     SELECT profile, commentaire
     FROM CLIENT
     WHERE CL.NUMPAYS=13;
@@ -351,7 +345,7 @@ CREATE VIEW CommentairePays13 AS
 Puis on effectue la jointure sur @ora11 afin de réduire le transfert des données
 ```sql
 Select *
-From CommentairePays13 cl, CommentairePays13@siteComplement.fr co
+From COMMANDE13 cl, COMMANDE13@siteComplement.fr co
 Where cl.numClient = co.numClient;
 ```
 

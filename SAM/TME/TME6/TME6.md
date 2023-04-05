@@ -53,7 +53,7 @@ Remote SQL Information (identified by operation id):
    3 - SELECT /*+ USE_NL ("C1") */ "NUMCDE","NUMCLIENT","ETAT","PRIXC","DATEC","PRIORITE","VENDEUR","C
        OMMENTAIRE" FROM "COMMANDE98" "C1" (accessing 'SITECOMPLEMENT.FR' )
 ```
-
+La jointure se fait dans la deuxième boucle, il faut donc lire toute la table distante et la transférer en local pour ensuite faire la joiture.
 
 ## R3
 ```
@@ -100,6 +100,7 @@ Remote SQL Information (identified by operation id):
    2 - SELECT /*+ USE_HASH ("C1") */ "NUMCDE","NUMCLIENT","ETAT","PRIXC","DATEC","PRIORIT
        E","VENDEUR","COMMENTAIRE" FROM "COMMANDE98" "C1" (accessing 'SITECOMPLEMENT.FR' )
 ```
+Le hash join évite le rapatriement de toute la table distante et ne vas chercher que ce qui est nécéssaire.
 
 ## R4 
 ```
@@ -204,7 +205,8 @@ Remote SQL Information (identified by operation id):
    3 - SELECT "NUMCDE","NUMCLIENT","ETAT","PRIXC","DATEC","PRIORITE","VENDEUR","COMMENTAIRE" FROM 
        "COMMANDE98" "C1" (accessing 'SITECOMPLEMENT.FR' )
 ```
-On constate en effet dans la première table que l'opération faite à distance contient 82 lignes et pèse assez lourd. 
+On constate en effet dans la première table que l'opération faite à distance contient 82 lignes et pèse assez lourd.
+Le merge entre l'index et le remote se fait en local, il faut donc importer tout l'index du remote, toute la table en local. Pour ensuite filtrer. Plans proche de celui de la requete ## R2
 
 
 ## R6
@@ -253,6 +255,9 @@ Remote SQL Information (identified by operation id):
    3 - SELECT "NUMCDE","NUMCLIENT","ETAT","PRIXC","DATEC","PRIORITE","VENDEUR","COMMENTAI
        RE" FROM "COMMANDE98" "C1" (accessing 'SITECOMPLEMENT.FR' )
 ```
+Ordered : ?
+
+Le filtre se fait toujours en local mais directement pendant le hash join, évitant ainsi un transfert complet de la table remote. 
 
 ## R7
 ```
@@ -305,7 +310,58 @@ Note
    - fully remote statement
    - dynamic sampling used for this statement (level=yes)
 ```
+Cette fois ci on demande au site distant de traiter entièrement la requete puis de renvoyé le résultat en local ici. On voit notamment dans la partie `Remote SQL` la selection sur le `LIKE` faite sur le Site `ora11`. On a donc finalement
+- Envois du résultat sur @ora11
+    - Joiture @ora10
+        - Client @ora11 -> $\sigma_{'\%001'}$@ora11
+        - Commande98 @ora10
 
 # Exercice 4
+Il y a plusieurs possibilité. La plus optimisé à mon gout est la suivante.
+
+```mermaid
+Client[("Client@S1")] --- Selection("Selection@S1(pays = 13)")
+Selection --- Jointure("Jointure@S1")
+
+Jointure --- Projection("Projection(numclient)")
+Projection --> Jointure2("Jointure@ora10")
+Commande98[("Commande98@S2")] --> Jointure2
+
+Jointure2 --- Projection2("Projection(Commentaire)")
+Projection2 --> Jointure3("Jointure@ora11")
+Jointure -->Jointure3
+
+Commande98[("Commande98@S2")] --> Jointure
+```
+
+En SQL on a tout d'abord la défition de la vue sur nos deux machines
+```sql
+CREATE VIEW CommentairePays13 AS 
+    SELECT profile, commentaire
+    FROM COMMANDE98 FAUXXXXXXX A REFAIRE
+    WHERE CL.NUMPAYS=13;
+```
+et sur @ora11
+```sql
+CREATE VIEW CommentairePays13 AS 
+    SELECT profile, commentaire
+    FROM CLIENT
+    WHERE CL.NUMPAYS=13;
+```
+Puis on effectue la jointure sur @ora11 afin de réduire le transfert des données
+```sql
+Select *
+From CommentairePays13 cl, CommentairePays13@siteComplement.fr co
+Where cl.numClient = co.numClient;
+```
+
 # Exercice 5
+```sql
+CREATE VIEW VueCommande98 AS 
+    SELECT *
+    FROM CLIENT
+    WHERE CL.NUMPAYS=13;
+```
 # Exercice 6
+
+# Exercice 7 

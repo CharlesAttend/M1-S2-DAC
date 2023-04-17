@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>TME6.md</title>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+    <style>
+        /* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+        /*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+        body {
+            font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+            font-size: var(--vscode-markdown-font-size, 14px);
+            padding: 0 26px;
+            margin: 7.5rem;
+            line-height: var(--vscode-markdown-line-height, 22px);
+            word-wrap: break-word;
+        }
+
+        #code-csp-warning {
+            position: fixed;
+            top: 0;
+            right: 0;
+            color: white;
+            margin: 16px;
+            text-align: center;
+            font-size: 12px;
+            font-family: sans-serif;
+            background-color: #444444;
+            cursor: pointer;
+            padding: 6px;
+            box-shadow: 1px 1px 1px rgba(0, 0, 0, .25);
+        }
+
+        #code-csp-warning:hover {
+            text-decoration: none;
+            background-color: #007acc;
+            box-shadow: 2px 2px 2px rgba(0, 0, 0, .25);
+        }
+
+        body.scrollBeyondLastLine {
+            margin-bottom: calc(100vh - 22px);
+        }
+
+        body.showEditorSelection .code-line {
+            position: relative;
+        }
+
+        body.showEditorSelection .code-active-line:before,
+        body.showEditorSelection .code-line:hover:before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: -12px;
+            height: 100%;
+        }
+
+        body.showEditorSelection li.code-active-line:before,
+        body.showEditorSelection li.code-line:hover:before {
+            left: -30px;
+        }
+
+        .vscode-light.showEditorSelection .code-active-line:before {
+            border-left: 3px solid rgba(0, 0, 0, 0.15);
+        }
+
+        .vscode-light.showEditorSelection .code-line:hover:before {
+            border-left: 3px solid rgba(0, 0, 0, 0.40);
+        }
+
+        .vscode-light.showEditorSelection .code-line .code-line:hover:before {
+            border-left: none;
+        }
+
+        .vscode-dark.showEditorSelection .code-active-line:before {
+            border-left: 3px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .vscode-dark.showEditorSelection .code-line:hover:before {
+            border-left: 3px solid rgba(255, 255, 255, 0.60);
+        }
+
+        .vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+            border-left: none;
+        }
+
+        .vscode-high-contrast.showEditorSelection .code-active-line:before {
+            border-left: 3px solid rgba(255, 160, 0, 0.7);
+        }
+
+        .vscode-high-contrast.showEditorSelection .code-line:hover:before {
+            border-left: 3px solid rgba(255, 160, 0, 1);
+        }
+
+        .vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+            border-left: none;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        a:focus,
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: 1px solid -webkit-focus-ring-color;
+            outline-offset: -1px;
+        }
+
+        hr {
+            border: 0;
+            height: 2px;
+            border-bottom: 2px solid;
+        }
+
+        h1 {
+            padding-bottom: 0.3em;
+            line-height: 1.2;
+            border-bottom-width: 1px;
+            border-bottom-style: solid;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-weight: normal;
+        }
+
+        table {
+            border-collapse: collapse;
+        }
+
+        table>thead>tr>th {
+            text-align: left;
+            border-bottom: 1px solid;
+        }
+
+        table>thead>tr>th,
+        table>thead>tr>td,
+        table>tbody>tr>th,
+        table>tbody>tr>td {
+            padding: 5px 10px;
+        }
+
+        table>tbody>tr+tr>td {
+            border-top: 1px solid;
+        }
+
+        blockquote {
+            margin: 0 7px 0 5px;
+            padding: 0 16px 0 10px;
+            border-left-width: 5px;
+            border-left-style: solid;
+        }
+
+        code {
+            font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+            font-size: 1em;
+            line-height: 1.357em;
+        }
+
+        body.wordWrap pre {
+            white-space: pre-wrap;
+        }
+
+        pre:not(.hljs),
+        pre.hljs code>div {
+            padding: 16px;
+            border-radius: 3px;
+            overflow: auto;
+        }
+
+        pre code {
+            color: var(--vscode-editor-foreground);
+            tab-size: 4;
+        }
+
+        /** Theming */
+
+        .vscode-light pre {
+            background-color: rgba(220, 220, 220, 0.4);
+        }
+
+        .vscode-dark pre {
+            background-color: rgba(10, 10, 10, 0.4);
+        }
+
+        .vscode-high-contrast pre {
+            background-color: rgb(0, 0, 0);
+        }
+
+        .vscode-high-contrast h1 {
+            border-color: rgb(0, 0, 0);
+        }
+
+        .vscode-light table>thead>tr>th {
+            border-color: rgba(0, 0, 0, 0.69);
+        }
+
+        .vscode-dark table>thead>tr>th {
+            border-color: rgba(255, 255, 255, 0.69);
+        }
+
+        .vscode-light h1,
+        .vscode-light hr,
+        .vscode-light table>tbody>tr+tr>td {
+            border-color: rgba(0, 0, 0, 0.18);
+        }
+
+        .vscode-dark h1,
+        .vscode-dark hr,
+        .vscode-dark table>tbody>tr+tr>td {
+            border-color: rgba(255, 255, 255, 0.18);
+        }
+    </style>
+
+    <style>
+        /* Tomorrow Theme */
+        /* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+        /* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+        /* Tomorrow Comment */
+        .hljs-comment,
+        .hljs-quote {
+            color: #8e908c;
+        }
+
+        /* Tomorrow Red */
+        .hljs-variable,
+        .hljs-template-variable,
+        .hljs-tag,
+        .hljs-name,
+        .hljs-selector-id,
+        .hljs-selector-class,
+        .hljs-regexp,
+        .hljs-deletion {
+            color: #c82829;
+        }
+
+        /* Tomorrow Orange */
+        .hljs-number,
+        .hljs-built_in,
+        .hljs-builtin-name,
+        .hljs-literal,
+        .hljs-type,
+        .hljs-params,
+        .hljs-meta,
+        .hljs-link {
+            color: #f5871f;
+        }
+
+        /* Tomorrow Yellow */
+        .hljs-attribute {
+            color: #eab700;
+        }
+
+        /* Tomorrow Green */
+        .hljs-string,
+        .hljs-symbol,
+        .hljs-bullet,
+        .hljs-addition {
+            color: #718c00;
+        }
+
+        /* Tomorrow Blue */
+        .hljs-title,
+        .hljs-section {
+            color: #4271ae;
+        }
+
+        /* Tomorrow Purple */
+        .hljs-keyword,
+        .hljs-selector-tag {
+            color: #8959a8;
+        }
+
+        .hljs {
+            display: block;
+            overflow-x: auto;
+            color: #4d4d4c;
+            padding: 0.5em;
+        }
+
+        .hljs-emphasis {
+            font-style: italic;
+        }
+
+        .hljs-strong {
+            font-weight: bold;
+        }
+    </style>
+
+    <style>
+        /*
+ * Markdown PDF CSS
+ */
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+            padding: 0 12px;
+        }
+
+        pre {
+            background-color: #f8f8f8;
+            border: 1px solid #cccccc;
+            border-radius: 3px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            overflow-wrap: break-word;
+        }
+
+        pre:not(.hljs) {
+            padding: 23px;
+            line-height: 19px;
+        }
+
+        blockquote {
+            background: rgba(127, 127, 127, 0.1);
+            border-color: rgba(0, 122, 204, 0.5);
+        }
+
+        .emoji {
+            height: 1.4em;
+        }
+
+        code {
+            font-size: 14px;
+            line-height: 19px;
+        }
+
+        /* for inline code */
+        :not(pre):not(.hljs)>code {
+            color: #C9AE75;
+            /* Change the old color so it seems less like an error */
+            font-size: inherit;
+        }
+
+        /* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+        .page {
+            page-break-after: always;
+        }
+    </style>
+
+    <script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+
+<body>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+                ? 'dark'
+                : 'default'
+        });
+    </script>
+    <h1 id="exercice-1">Exercice 1</h1>
+    <h2 id="r2">R2</h2>
+    <p>Après ajout de l'index <code>IDX_NUMCLIENT</code></p>
+    <pre class="hljs"><code><div>Plan hash value: 51045663
+ 
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                    | Name          | Rows  | Bytes | Cost (%CPU)| Time     | Inst   |IN-OUT|
+--------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT             |               |    82 | 20336 |   166   (0)| 00:00:03 |        |      |
+|   1 |  NESTED LOOPS                |               |       |       |            |          |        |      |
+|   2 |   NESTED LOOPS               |               |    82 | 20336 |   166   (0)| 00:00:03 |        |      |
+|   3 |    REMOTE                    | COMMANDE98    |    82 | 11152 |     2   (0)| 00:00:01 | SITEC~ | R-&gt;S |
+|*  4 |    INDEX RANGE SCAN          | IDX_NUMCLIENT |     1 |       |     1   (0)| 00:00:01 |        |      |
+|   5 |   TABLE ACCESS BY INDEX ROWID| CLIENT        |     1 |   112 |     2   (0)| 00:00:01 |        |      |
+--------------------------------------------------------------------------------------------------------------
+ 
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+ 
+   1 - SEL$1
+   3 - SEL$1 / C1@SEL$1
+   4 - SEL$1 / C@SEL$1
+   5 - SEL$1 / C@SEL$1
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   4 - access(&quot;C&quot;.&quot;NUMCLIENT&quot;=&quot;C1&quot;.&quot;NUMCLIENT&quot;)
+ 
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+ 
+   1 - (#keys=0) &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100], &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], 
+       &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10], 
+       &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117]
+   2 - (#keys=0) &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100], &quot;C&quot;.ROWID[ROWID,10], 
+       &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22]
+   3 - &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100]
+   4 - &quot;C&quot;.ROWID[ROWID,10], &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22]
+   5 - &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10], 
+       &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117]
+ 
+Remote SQL Information (identified by operation id):
+----------------------------------------------------
+ 
+   3 - SELECT /*+ USE_NL (&quot;C1&quot;) */ &quot;NUMCDE&quot;,&quot;NUMCLIENT&quot;,&quot;ETAT&quot;,&quot;PRIXC&quot;,&quot;DATEC&quot;,&quot;PRIORITE&quot;,&quot;VENDEUR&quot;,&quot;C
+       OMMENTAIRE&quot; FROM &quot;COMMANDE98&quot; &quot;C1&quot; (accessing 'SITECOMPLEMENT.FR' )
+</div></code></pre>
+    <p>La jointure se fait dans la deuxième boucle, il faut donc lire toute la table distante et la transférer en local
+        pour ensuite faire la joiture.</p>
+    <h2 id="r3">R3</h2>
+    <pre class="hljs"><code><div>Plan hash value: 3532254581
+ 
+-------------------------------------------------------------------------------------------------
+| Id  | Operation          | Name       | Rows  | Bytes | Cost (%CPU)| Time     | Inst   |IN-OUT|
+-------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |            |    82 | 20336 |   186   (1)| 00:00:03 |        |      |
+|*  1 |  HASH JOIN         |            |    82 | 20336 |   186   (1)| 00:00:03 |        |      |
+|   2 |   REMOTE           | COMMANDE98 |    82 | 11152 |     2   (0)| 00:00:01 | SITEC~ | R-&gt;S |
+|   3 |   TABLE ACCESS FULL| CLIENT     | 42247 |  4620K|   184   (1)| 00:00:03 |        |      |
+-------------------------------------------------------------------------------------------------
+ 
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+ 
+   1 - SEL$1
+   2 - SEL$1 / C1@SEL$1
+   3 - SEL$1 / C@SEL$1
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   1 - access(&quot;C&quot;.&quot;NUMCLIENT&quot;=&quot;C1&quot;.&quot;NUMCLIENT&quot;)
+ 
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+ 
+   1 - (#keys=1) &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], 
+       &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117], &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], 
+       &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10]
+   2 - &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100]
+   3 - &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], 
+       &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10], &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117]
+ 
+Remote SQL Information (identified by operation id):
+----------------------------------------------------
+ 
+   2 - SELECT /*+ USE_HASH (&quot;C1&quot;) */ &quot;NUMCDE&quot;,&quot;NUMCLIENT&quot;,&quot;ETAT&quot;,&quot;PRIXC&quot;,&quot;DATEC&quot;,&quot;PRIORIT
+       E&quot;,&quot;VENDEUR&quot;,&quot;COMMENTAIRE&quot; FROM &quot;COMMANDE98&quot; &quot;C1&quot; (accessing 'SITECOMPLEMENT.FR' )
+</div></code></pre>
+    <p>Le hash join évite le rapatriement de toute la table distante et ne vas chercher que ce qui est nécéssaire.</p>
+    <h2 id="r4">R4</h2>
+    <pre class="hljs"><code><div>Plan hash value: 3532254581
+ 
+-------------------------------------------------------------------------------------------------
+| Id  | Operation          | Name       | Rows  | Bytes | Cost (%CPU)| Time     | Inst   |IN-OUT|
+-------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |            |     1 |   248 |   186   (1)| 00:00:03 |        |      |
+|*  1 |  HASH JOIN         |            |     1 |   248 |   186   (1)| 00:00:03 |        |      |
+|   2 |   REMOTE           | COMMANDE98 |     1 |   136 |     2   (0)| 00:00:01 | SITEC~ | R-&gt;S |
+|   3 |   TABLE ACCESS FULL| CLIENT     | 42247 |  4620K|   184   (1)| 00:00:03 |        |      |
+-------------------------------------------------------------------------------------------------
+ 
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+ 
+   1 - SEL$1
+   2 - SEL$1 / C1@SEL$1
+   3 - SEL$1 / C@SEL$1
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   1 - access(&quot;C&quot;.&quot;NUMCLIENT&quot;=&quot;C1&quot;.&quot;NUMCLIENT&quot;)
+ 
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+ 
+   1 - (#keys=1) &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], 
+       &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117], &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], 
+       &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10]
+   2 - &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100]
+   3 - &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], 
+       &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10], &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117]
+ 
+Remote SQL Information (identified by operation id):
+----------------------------------------------------
+ 
+   2 - SELECT /*+ USE_HASH (&quot;C1&quot;) */ &quot;NUMCDE&quot;,&quot;NUMCLIENT&quot;,&quot;ETAT&quot;,&quot;PRIXC&quot;,&quot;DATEC&quot;,&quot;PRIORIT
+       E&quot;,&quot;VENDEUR&quot;,&quot;COMMENTAIRE&quot; FROM &quot;COMMANDE98&quot; &quot;C1&quot; WHERE &quot;PRIXC&quot;=1000 (accessing 
+       'SITECOMPLEMENT.FR' )
+</div></code></pre>
+    <p>On peut voir dans la partie <code>Remote SQL</code> que la selection sur le prix est faite sur le site distant.
+    </p>
+    <h1 id="exercice-3">Exercice 3</h1>
+    <h2 id="r5">R5</h2>
+    <pre class="hljs"><code><div>Plan hash value: 51045663
+ 
+--------------------------------------------------------------------------------------------------------------
+| Id  | Operation                    | Name          | Rows  | Bytes | Cost (%CPU)| Time     | Inst   |IN-OUT|
+--------------------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT             |               |     4 |   992 |   166   (0)| 00:00:03 |        |      |
+|   1 |  NESTED LOOPS                |               |       |       |            |          |        |      |
+|   2 |   NESTED LOOPS               |               |     4 |   992 |   166   (0)| 00:00:03 |        |      |
+|   3 |    REMOTE                    | COMMANDE98    |    82 | 11152 |     2   (0)| 00:00:01 | SITEC~ | R-&gt;S |
+|*  4 |    INDEX RANGE SCAN          | IDX_NUMCLIENT |     1 |       |     1   (0)| 00:00:01 |        |      |
+|*  5 |   TABLE ACCESS BY INDEX ROWID| CLIENT        |     1 |   112 |     2   (0)| 00:00:01 |        |      |
+--------------------------------------------------------------------------------------------------------------
+ 
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+ 
+   1 - SEL$1
+   3 - SEL$1 / C1@SEL$1
+   4 - SEL$1 / C@SEL$1
+   5 - SEL$1 / C@SEL$1
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   4 - access(&quot;C&quot;.&quot;NUMCLIENT&quot;=&quot;C1&quot;.&quot;NUMCLIENT&quot;)
+   5 - filter(&quot;C&quot;.&quot;NOM&quot; LIKE '%001')
+ 
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+ 
+   1 - (#keys=0) &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100], &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], 
+       &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10], 
+       &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117]
+   2 - (#keys=0) &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100], &quot;C&quot;.ROWID[ROWID,10], 
+       &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22]
+   3 - &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100]
+   4 - &quot;C&quot;.ROWID[ROWID,10], &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22]
+   5 - &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10], 
+       &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117]
+ 
+Remote SQL Information (identified by operation id):
+----------------------------------------------------
+ 
+   3 - SELECT &quot;NUMCDE&quot;,&quot;NUMCLIENT&quot;,&quot;ETAT&quot;,&quot;PRIXC&quot;,&quot;DATEC&quot;,&quot;PRIORITE&quot;,&quot;VENDEUR&quot;,&quot;COMMENTAIRE&quot; FROM 
+       &quot;COMMANDE98&quot; &quot;C1&quot; (accessing 'SITECOMPLEMENT.FR' )
+</div></code></pre>
+    <p>On constate en effet dans la première table que l'opération faite à distance contient 82 lignes et pèse assez
+        lourd.
+        Le merge entre l'index et le remote se fait en local, il faut donc importer tout l'index du remote, toute la
+        table en local. Pour ensuite filtrer. Plans proche de celui de la requete ## R2</p>
+    <h2 id="r6">R6</h2>
+    <pre class="hljs"><code><div>Plan hash value: 2764306955
+ 
+-------------------------------------------------------------------------------------------------
+| Id  | Operation          | Name       | Rows  | Bytes | Cost (%CPU)| Time     | Inst   |IN-OUT|
+-------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT   |            |     4 |   992 |   186   (1)| 00:00:03 |        |      |
+|*  1 |  HASH JOIN         |            |     4 |   992 |   186   (1)| 00:00:03 |        |      |
+|*  2 |   TABLE ACCESS FULL| CLIENT     |  2112 |   231K|   184   (1)| 00:00:03 |        |      |
+|   3 |   REMOTE           | COMMANDE98 |    82 | 11152 |     2   (0)| 00:00:01 | SITEC~ | R-&gt;S |
+-------------------------------------------------------------------------------------------------
+ 
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+ 
+   1 - SEL$1
+   2 - SEL$1 / C@SEL$1
+   3 - SEL$1 / C1@SEL$1
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   1 - access(&quot;C&quot;.&quot;NUMCLIENT&quot;=&quot;C1&quot;.&quot;NUMCLIENT&quot;)
+   2 - filter(&quot;C&quot;.&quot;NOM&quot; LIKE '%001')
+ 
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+ 
+   1 - (#keys=1) &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], 
+       &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117], &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], 
+       &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10], &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100], 
+       &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], 
+       &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15]
+   2 - &quot;C&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;C&quot;.&quot;NUMPAYS&quot;[NUMBER,22], 
+       &quot;C&quot;.&quot;SEGMENT&quot;[CHARACTER,10], &quot;C&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117]
+   3 - &quot;C1&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;C1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;C1&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;C1&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;C1&quot;.&quot;DATEC&quot;[DATE,7], &quot;C1&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;C1&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;C1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100]
+ 
+Remote SQL Information (identified by operation id):
+----------------------------------------------------
+ 
+   3 - SELECT &quot;NUMCDE&quot;,&quot;NUMCLIENT&quot;,&quot;ETAT&quot;,&quot;PRIXC&quot;,&quot;DATEC&quot;,&quot;PRIORITE&quot;,&quot;VENDEUR&quot;,&quot;COMMENTAI
+       RE&quot; FROM &quot;COMMANDE98&quot; &quot;C1&quot; (accessing 'SITECOMPLEMENT.FR' )
+</div></code></pre>
+    <p>Ordered : ?</p>
+    <p>Le filtre se fait toujours en local mais directement pendant le hash join, évitant ainsi un transfert complet de
+        la table remote.</p>
+    <h2 id="r7">R7</h2>
+    <pre class="hljs"><code><div>Plan hash value: 2618700453
+ 
+-----------------------------------------------------------------------------------------------------
+| Id  | Operation              | Name       | Rows  | Bytes | Cost (%CPU)| Time     | Inst   |IN-OUT|
+-----------------------------------------------------------------------------------------------------
+|   0 | SELECT STATEMENT REMOTE|            |  2592 |   627K|   189   (3)| 00:00:03 |        |      |
+|*  1 |  HASH JOIN             |            |  2592 |   627K|   189   (3)| 00:00:03 |        |      |
+|   2 |   REMOTE               | CLIENT     |  2112 |   231K|   118   (2)| 00:00:02 |      ! | R-&gt;S |
+|   3 |   TABLE ACCESS FULL    | COMMANDE98 | 17996 |  2390K|    70   (2)| 00:00:01 |  ORA10 |      |
+-----------------------------------------------------------------------------------------------------
+ 
+Query Block Name / Object Alias (identified by operation id):
+-------------------------------------------------------------
+ 
+   1 - SEL$1
+   2 - SEL$1 / A1@SEL$1
+   3 - SEL$1 / A2@SEL$1
+ 
+Predicate Information (identified by operation id):
+---------------------------------------------------
+ 
+   1 - access(&quot;A1&quot;.&quot;NUMCLIENT&quot;=&quot;A2&quot;.&quot;NUMCLIENT&quot;)
+ 
+Column Projection Information (identified by operation id):
+-----------------------------------------------------------
+ 
+   1 - (#keys=1) &quot;A1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;A2&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], 
+       &quot;A1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117], &quot;A1&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;A1&quot;.&quot;NUMPAYS&quot;[NUMBER,22], 
+       &quot;A1&quot;.&quot;SEGMENT&quot;[CHARACTER,10], &quot;A2&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;A2&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100], 
+       &quot;A2&quot;.&quot;ETAT&quot;[VARCHAR2,1], &quot;A2&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;A2&quot;.&quot;DATEC&quot;[DATE,7], 
+       &quot;A2&quot;.&quot;PRIORITE&quot;[CHARACTER,15], &quot;A2&quot;.&quot;VENDEUR&quot;[CHARACTER,15]
+   2 - &quot;A1&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;A1&quot;.&quot;NOM&quot;[VARCHAR2,25], &quot;A1&quot;.&quot;NUMPAYS&quot;[NUMBER,22], 
+       &quot;A1&quot;.&quot;SEGMENT&quot;[CHARACTER,10], &quot;A1&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,117]
+   3 - &quot;A2&quot;.&quot;NUMCDE&quot;[NUMBER,22], &quot;A2&quot;.&quot;NUMCLIENT&quot;[NUMBER,22], &quot;A2&quot;.&quot;ETAT&quot;[VARCHAR2,1], 
+       &quot;A2&quot;.&quot;PRIXC&quot;[NUMBER,22], &quot;A2&quot;.&quot;DATEC&quot;[DATE,7], &quot;A2&quot;.&quot;PRIORITE&quot;[CHARACTER,15], 
+       &quot;A2&quot;.&quot;VENDEUR&quot;[CHARACTER,15], &quot;A2&quot;.&quot;COMMENTAIRE&quot;[VARCHAR2,100]
+ 
+Remote SQL Information (identified by operation id):
+----------------------------------------------------
+ 
+   2 - SELECT &quot;NUMCLIENT&quot;,&quot;NOM&quot;,&quot;NUMPAYS&quot;,&quot;SEGMENT&quot;,&quot;COMMENTAIRE&quot; FROM &quot;CLIENT&quot; &quot;A1&quot; WHERE 
+       &quot;NOM&quot; LIKE '%001' (accessing '!' )
+ 
+ 
+Note
+-----
+   - fully remote statement
+   - dynamic sampling used for this statement (level=yes)
+</div></code></pre>
+    <p>Cette fois ci on demande au site distant de traiter entièrement la requete puis de renvoyé le résultat en local
+        ici. On voit notamment dans la partie <code>Remote SQL</code> la selection sur le <code>LIKE</code> faite sur le
+        Site <code>ora11</code>. On a donc finalement</p>
+    <ul>
+        <li>Envois du résultat sur @ora11
+            <ul>
+                <li>Joiture @ora10
+                    <ul>
+                        <li>Client @ora11 -&gt; $\sigma_{'%001'}$@ora11</li>
+                        <li>Commande98 @ora10</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+    <h1 id="exercice-4">Exercice 4</h1>
+    <p>Il y a plusieurs possibilité. La plus optimisé à mon gout est la suivante.</p>
+    <h2 id="solution-1">Solution 1</h2>
+    <img src="mermaid-diagram-2023-04-05-201044.svg" height="750px">
+    <p>Ici les flèches représentent un transfert entre deux machines</p>
+    <ul>
+        <li><code>Transfert 1</code> : Premier transfert de <code>numCommande</code> uniquement afin de selectionner
+            uniquement les pays numéro 13.</li>
+        <li><code>Transfert 2</code> : Retour des <code>numClient</code> du pays 13 uniquement vers la machine distante
+            afin de pouvoir envoyer les commentaires (lourds) uniquement du pays 13</li>
+        <li><code>Transfert 3</code> : Le transfert des commentaire uniquement nécéssaire à la jointure vers la machine
+            local
+            La première jointure est pourait être faite sur la machine distante, évitant l'aller retour des
+            <code>numClient</code> entre les deux machine.
+            Mais cela nécéssiterait le transfert de l'entiéreté des <code>numClient</code>, ce qui me semble plus lourds
+            que deux transferts des <code>numClient</code> de Juillet 1980 uniquement.
+        </li>
+    </ul>
+    <p>En SQL on a tout d'abord la défition de la vue sur la machine distante</p>
+    <pre class="hljs"><code><div><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> COMMANDE13 <span class="hljs-keyword">AS</span> 
+<span class="hljs-keyword">SELECT</span> cl.profile, co.commentaire
+    <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">CLIENT</span>@SITEORIGINAL.fr CL, COMMANDE98 CO 
+    <span class="hljs-keyword">WHERE</span> CL.NUMCLIENT=CO.NUMCLIENT <span class="hljs-keyword">AND</span> CL.NUMPAYS=<span class="hljs-number">13</span>;
+</div></code></pre>
+    <p>et sur @ora11</p>
+    <pre class="hljs"><code><div><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> CommenCOMMANDE13tairePays13 <span class="hljs-keyword">AS</span> 
+    <span class="hljs-keyword">SELECT</span> profile, commentaire
+    <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">CLIENT</span>
+    <span class="hljs-keyword">WHERE</span> CL.NUMPAYS=<span class="hljs-number">13</span>;
+</div></code></pre>
+    <p>Puis on effectue la jointure sur @ora11 afin de réduire le transfert des données</p>
+    <pre class="hljs"><code><div><span class="hljs-keyword">Select</span> *
+<span class="hljs-keyword">From</span> COMMANDE13 cl, COMMANDE13@siteComplement.fr co
+<span class="hljs-keyword">Where</span> cl.numClient = co.numClient;
+</div></code></pre>
+    <h1 id="exercice-5">Exercice 5</h1>
+    <pre class="hljs"><code><div><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">VIEW</span> VueCommande98 <span class="hljs-keyword">AS</span> 
+    <span class="hljs-keyword">SELECT</span> *
+    <span class="hljs-keyword">FROM</span> <span class="hljs-keyword">CLIENT</span>
+    <span class="hljs-keyword">WHERE</span> CL.NUMPAYS=<span class="hljs-number">13</span>;
+</div></code></pre>
+    <h1 id="exercice-6">Exercice 6</h1>
+    <h1 id="exercice-7">Exercice 7</h1>
+
+</body>
+
+</html>

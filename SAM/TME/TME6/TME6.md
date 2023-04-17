@@ -320,7 +320,8 @@ Cette fois ci on demande au site distant de traiter entièrement la requete puis
 Il y a plusieurs possibilité. La plus optimisé à mon gout est la suivante.
 
 ## Solution 1
-![](mermaid-diagram-2023-04-05-201044.svg)
+<img src="mermaid-diagram-2023-04-05-201044.svg" height="750px">
+
 Ici les flèches représentent un transfert entre deux machines
 - `Transfert 1` : Premier transfert de `numCommande` uniquement afin de selectionner uniquement les pays numéro 13. 
 - `Transfert 2` : Retour des `numClient` du pays 13 uniquement vers la machine distante afin de pouvoir envoyer les commentaires (lourds) uniquement du pays 13
@@ -356,6 +357,7 @@ CREATE VIEW VueCommande98 AS
     FROM CLIENT
     WHERE CL.NUMPAYS=13;
 ```
+
 # Exercice 6
 
 # Exercice 7 

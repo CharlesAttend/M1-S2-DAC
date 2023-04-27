@@ -135,6 +135,8 @@ Soit $ R $ une v.a.r binaire pour un dociment $ d $ est pertinent pour la questi
     \[
         s(q,d) = \sum_{t \in q \sqcap d}^{} \log \frac{p_t (1 - u_t)}{u_t (1 - p_t)}
     .\]
+    \item On estime les proba par max vraissemblance qui donne juste la fréquence des termes
+    \item On peut intégré un prior sur $ P(d) $ mais je sais honnetement pas à quelle étape : longueur du doc, longueur moyenne des mots, date, nombre de lien, pagerank
 \end{itemize}
 
 \subsection{BM25/Okapi}
@@ -142,5 +144,42 @@ Si $ t \not\in d \Leftrightarrow TF_t = 0 $ puis avec une modelisation de poisso
 
 \section{Modèle de langue }
 Basé sur l'idée que pour faire une recherche on imagine les mots que le documents pertinent vas contenir. Quel est la proba que le document soit généré par le même modèle de langue que le document.
+
+\[
+    p(t_1, \dots, t_n) = \sum_{t}^{}tf(t)\log_{} P(t | \theta _{Md}) = \sum_{t}^{}tf(t)\log_{} p_t
+.\]
+Par max vraissemblance + langragien  $ p_t = \frac{tf_(t)}{\sum_{t}^{}tf(t)} $ . C'est très très flou dans le diapo.
+
+Dans le cas où un mot de la requête n'apparrait pas dans le document, score = 0 $\rightarrow$ Lissage des probas = modèle de
+mélange multinomial entre la distribution des termes dans le
+document et la distribution des termes dans la collection = Dirichlet ou Jelinek-Mercer
+
+\section{Reformulation de requete}
+\subsection{Revelance feedback}
+Recalculer les poids des document en fonction du feedback des users et recalculer des nouveaux score. Modèle de Rocchio pour les modèles vectoriel \begin{itemize}
+    \item Par le retour de l'utilisateur, deux ensembles de vecteur de document : les documents pertinent VS les non pertinents
+    \item Vecteur moyen des documents pertinent $\rightarrow$ Correction de notre vecteur de question 
+\end{itemize}
+Limite : 
+\begin{itemize}
+    \item Fiabilité des users sur les retours positif négatif 
+    \item Comment ils évalue la pertinence
+    \item Mais on garde un effet de masse qui moyenne les erreurs 
+\end{itemize}
+
+\subsection{Pseudo revelance feedback}
+Sugestion d'une nouvelle requete en se basant sur les $ k $ premier document. Pour la trouver méthode de clustering, similarité des termes, ...
+
+Limite : 
+\begin{itemize}
+    \item Couteux
+    \item Query drift : si les top documents ne sont pas pertinents, la requete reformulée ne reflètera jamais le besoin de l'utilisateur (exemple : Apple et apple :  on vas biaiser la requete vers un seul des deux sens)
+\end{itemize}
+
+\section{Métrique}
+\subsection{Métrique orientées rappel/précision}
+
+
+\subsection{Métrique orientées rang}
 
 \end{document}

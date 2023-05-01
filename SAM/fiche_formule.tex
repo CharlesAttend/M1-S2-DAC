@@ -51,7 +51,7 @@
     \[
         P(R) = \frac{card(R)}{T_{page} / largeur(R)} = \frac{card(R)}{a}
     .\]
-    avec $ T_{page} = $ taille d'une page en octets et $ a $ nombre de n-uplet de R dans \textbf{une} page
+    avec $ T_{page} = $ taille d'une page en octets, $largeur(R)$ le nombre de colonne de $R$ et $ a $ nombre de n-uplet de R dans \textbf{une} page
     \[
         cout(R) = P(R) * c
     .\]
@@ -60,7 +60,7 @@
     1 &\text{ sinon }\\
     \end{cases}  $ 
     \item Selection $ \sigma  $ : \begin{itemize}
-        \item Si $ E $ est une expression composé : $ cout(\sigma _{p(A)}) = cout(E) $
+        \item Si $ E $ est une expression composé : $ cout(\sigma _{p(A)}(E)) = cout(E) $
         \item Si $ T $ table et $ A $ pas indexé : $ cout(\sigma _{p(A)}(T)) = P(T) $ 
     \end{itemize}
     \item Sélection index non plaçant 

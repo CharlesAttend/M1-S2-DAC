@@ -67,29 +67,7 @@
     \end{itemize}
 \end{itemize}
 
-\section{Métrique}
-Précision et rappel
-\begin{itemize}
-    \item Recall : Pourcentage de documents pertinents renvoyés parmi tous ceux qui sont pertinents. Utilisé quand les faux négatifs sont couteux (exemple : le médical).
-    \[
-        \frac{\left\| R \cap P \right\| }{\left\| P \right\| }
-    .\]
-    Avec $ R $ l'ensemble des documents renvoyés et $ P $ les documents pertinents. 
 
-    \item Précision : Pourcentable de documents pertinents renvoyés parmis ceux renvoyés. Utilisé quand les faux positif sont couteux (exemple : la RI).
-    \[
-        \frac{\left\| R \cap P \right\| }{\left\| R \right\| }
-    .\]
-    Avec $ R $ l'ensemble des documents renvoyés et $ P $ les documents pertinents.
-
-    \item C'est un compromi, augmenter l'un fait baisser l'autre
-\end{itemize}
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics*[width=.5\textwidth]{precision_recall_conf_matrix.png}
-    \caption{En rouge la précision, en jaune le rappel}
-    \label{fig:precision_recall}
-\end{figure}
 
 \section{Loi de Zipf}
 Stipule que la fréquence d'occurrence d'un mot est inversement proportionnelle à celle de son rang. Le 1er mot est environ 2 fois plus fréquent que le 2nd qui est 2 fois plus fréquent que le 3e etc.. 
@@ -178,8 +156,50 @@ Limite :
 
 \section{Métrique}
 \subsection{Métrique orientées rappel/précision}
+Précision et rappel
+\begin{itemize}
+    \item Recall : Pourcentage de documents pertinents renvoyés parmi tous ceux qui sont pertinents. Utilisé quand les faux négatifs sont couteux (exemple : le médical, documentaliste).
+    \[
+        \frac{\left\| R \cap P \right\| }{\left\| P \right\| }
+    .\]
+    Avec $ R $ l'ensemble des documents renvoyés et $ P $ les documents pertinents. 
 
+    \item Précision : Pourcentable de documents pertinents renvoyés parmis ceux renvoyés. Utilisé quand les faux positif sont couteux (exemple : la RI : moteur de recherche).
+    \[
+        \frac{\left\| R \cap P \right\| }{\left\| R \right\| }
+    .\]
+    Avec $ R $ l'ensemble des documents renvoyés et $ P $ les documents pertinents.
+
+    \item C'est un compromi, augmenter l'un fait baisser l'autre
+    \item F-mesure 
+    \[
+        F_\beta = (1 + \beta ^2) \frac{P * R}{\beta ^2 (P+R)}
+    .\]
+
+    \item Tracer une courbe précision recall : \begin{enumerate}
+        \item faire un tableau avec pour colonne : rang, (probabilité), y true, recall, precision.
+        \item Calculer le recal et la précision pour chaque ligne en rajoutant les résultats d'avant
+        \item Puis pour tracer la courbe : chaque ligne = un point du graph
+    \end{enumerate}
+    
+    \item Précision interpolée : super visuel, pour tracer la courbe, on fait varier le recall, pour chaque point on regarde la précision max à droite de ce point. Soit $ r $  un point de recall, $ P_{interp}(r) = \max _{r' \geq r} P(r') $ 
+    
+    \item Précision moyenne : moyenne arithmétique de la précision interpolé \\
+    OU $ \approx \text{AveP} = \frac{\sum_{k=1}^n P(k) \times {1}_{doc_k \text{ is revelant}}} {\text{total number of relevant documents}}$ 
+    \item \textbf{Moyenne des précision moyenne (MAP)} = moyenne des précision moyenne pour chaque requette
+    
+\end{itemize}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics*[width=.5\textwidth]{precision_recall_conf_matrix.png}
+    \caption{En rouge la précision, en jaune le rappel}
+    \label{fig:precision_recall}
+\end{figure}
 
 \subsection{Métrique orientées rang}
-
+\begin{itemize}
+    \item \textbf{Moyenne des rangs inverse (MRR)} : moyenne de l'inverse du rang du premier document pertinent renvoyé sur l'ensemble des requêtes $ \frac{1}{\left| Q \right| } \sum_{q \in Q}^{} \frac{1}{rank_i} $ where $ \text{rank}_{i}$ refers to the rank position of the first relevant document for the i-th query.
+    
+    \item \textbf{Discounted cumulative gain (DCG)}
+\end{itemize}
 \end{document}

@@ -10,6 +10,7 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{systeme}
+\usepackage{multicol}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -290,6 +291,94 @@ Généralité SVM
 \end{itemize}
 
 \section{Réseau de neurone}
+\subsection{Les bases}
+\[
+    \begin{aligned}
+        & \frac{\partial L}{\partial w_i^h}=\sum_k \frac{\partial L}{\partial z_k^h} \frac{\partial z_k^h}{\partial w_i^h}=\sum_k \delta_k^h \frac{\partial z_k^h}{\partial w_i^h}, \text { soit } \nabla_{\mathbf{w}^h} L=\left(\begin{array}{ccc}
+            \frac{\partial z_1^h}{\partial w_1^h} & \frac{\partial z_2^h}{\partial w_1^h} & \cdots \\
+            \frac{\partial z_1^h}{\partial w_2^h} & \ddots & \\
+            \vdots & &
+        \end{array}\right) \nabla_{\mathbf{z}^h L} \\
+        & \delta_j^{h-1}=\frac{\partial L}{\partial z_j^{h-1}}=\sum_k \frac{\partial L}{\partial z_k^h} \frac{\partial z_k^h}{\partial z_j^{h-1}}, \text { soit } \nabla_{\mathbf{z}^{h-1}} L=\left(\begin{array}{ccc}
+        \frac{\partial z_1^h}{z_1^{h-1}} & \frac{\partial z_2^h}{z_1^{h-1}} & \cdots \\
+        \frac{\partial z_2^h}{z_2^{h-1}} & \ddots & \cdots \\
+        \vdots &
+        \end{array}\right) \nabla_{\mathbf{z}^h L}
+    \end{aligned}
+.\]
+
+\subsection{Les modules, leurs dérivées, leurs atoux}
+
+\begin{multicols}{2}
+Paramètres : \\
+Formule : $ M^h(z^h) =  $ \\
+Dérivé : $ \frac{\partial M^h}{\partial w} = , \frac{\partial M}{\partial z^h} = $ \\
+Atoux : 
+
+
+\subsubsection{Linear}
+Paramètre : $ W \in \mathbb{R}^{input \times output} $ \\
+Formule : $ M^h(z^h) =  {z^h}^T * W $ \\
+Dérivé : $ \frac{\partial M^h}{\partial w}(z^h) = z^h, \frac{\partial M}{\partial z^h} = W $ \\
+
+\subsubsection{TanH}
+Paramètre : \\
+Formule : $ M^h(z^h) =  \tanh(z^h) = \frac{\sinh z^h}{\cosh z^h} = \frac{\exp(z^h) - \exp(-z^h)} {\exp(z^h) + \exp(-z^h)} = \frac{e^{2z^h} - 1 }{e^{2z^h} + 1}$ \\
+Dérivé : $\frac{\partial M}{\partial z^h} = 1 - \tanh (z^h)^2$ \\
+Atoux : Entre -1 et 1
+
+
+\subsubsection{Sigmoid}
+Paramètre : \\
+Formule : $ M^h(z^h) =  \sigma(z^h) = \frac{1}{1 + \exp(-z^h)}$ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} = \sigma (z^h) * (1 - \sigma (z^h)) $ \\
+Atoux : Entre 0 et 1
+
+
+\subsubsection{SoftMax}
+Paramètres : \\
+Formule : $ M^h(x_i) = \frac{\exp(x_i)}{\sum_j \exp(x_j)} $ \\
+Dérivé : $ \frac{\partial M(x_i)}{\partial x_i} = M^h(x_i) * (1 - M^h(x_i)) $ plus précisement $ \frac{\partial M^h(x_i)}{x_j} = \begin{cases}
+    M^h(x_i) * ( 1 - M^h(x_j) ) &\text{si } i = j \\
+    - M^h(x_j) M^h(x_i) &\text{ si } i \neq j \\
+\end{cases}  $  \\
+Atoux : Combo cross entropy pour plus de perf en dernière couche je crois ça se calcule mieux. Y'a une interprétation proba aussi.
+
+
+\subsubsection{LogSoftMax}
+Paramètres : \\
+Formule : $ M^h(z^h) = \log ( \frac{ \exp(x_i) }{ \sum_j \exp(x_j) } ) $ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} =  $ \\
+Atoux : When used for classifiers the log-softmax has the effect of heavily penalizing the model when it fails to predict a correct class.
+
+\subsubsection{ReLU}
+Paramètres : \\
+Formule : $ M^h(z^h) = \max (0, x) $ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} = 1 \text{ if } x > 0 \text{ else } 0 $ \\
+Atoux : 
+
+\subsubsection{SoftPlus/SmoothReLU}
+Paramètres : \\
+Formule : $ M^h(z^h) = \ln (1 + e^x) $ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} = \sigma (x) = \frac{1}{1 + e^{-x}} $ \\
+Atoux : Approxime la relu d'une manière dérivable partout
+
+\subsubsection{LearkyReLU}
+Paramètres : \\
+Formule : $ M^h(z^h) = \max(\alpha x, x) $ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} = 
+    \begin{cases} 
+        1 & \text{if } x>0, \\
+        \alpha & \text{otherwise}.
+    \end{cases}$ \\
+Atoux : Leaky ReLUs allow a small, positive gradient when the unit is not active.
+
+\subsubsection{MSELoss}
+\subsubsection{Cross Entropy Loss}
+\subsubsection{Binary CE Loss}
+\subsubsection{CELog Soft Max}
+
+\end{multicols}
 
 \section{Non supervisé}
 
@@ -339,7 +428,9 @@ On veut pouvoir combiner des classfiers, ils doivent être indépendant. Comment
 
 
 \section{Reinforcement Learning}
-Policy itération \begin{itemize}
+\subsection{Policy itération}
+Policy itération : policy evaluation + policy improvement, and the two are repeated iteratively until policy converges.
+\begin{itemize}
     \item $ V^\pi (s) = E[G_t | S_t = s] = E[ \sum_{k \geq 0}^{} \gamma ^k R_{t+k}] $ avec $ R_{t+k} $ les récompenss obtenues à l'état $ t+k $. $ V^\pi $ représente la moyenne des récompenses possible dans le futur, futur plus où moins proche réglé par $ \gamma  $ 
     \item Par l'equation de Bellman
     \[
@@ -350,17 +441,15 @@ Policy itération \begin{itemize}
     \[
         \pi _{k+1}(s) = argmax_a \sum_{s'}^{} P(s' | s, a) [ r(s, a, s') + \gamma V^{k}(s')]
     .\]
-    \item L'étape d'évaluation de la policy est couteuse. On peut la skip en évaluant directement chaque action pendant l'entrainement, ça fait sauter la première somme dans la formule donnant 
-    \[
-        V^*(s) = \max _\pi V^\pi (s) = \max _a \sum_{s'}^{} P(s' | s, a)[r(s, a, s') + \gamma V^*(s')]
-    .\]
+    \item L'étape d'évaluation de la policy est couteuse. On peut la skip en évaluant directement chaque action pendant l'entrainement, ça fait sauter la première somme dans la formule donnant l'algo de Policy Itératio
 \end{itemize}
 
 
 \paragraph*{Application} : 
 
-Evaluation d'une politique $ \pi  $ 
+Evaluation d'une politique $ \pi $ 
 \begin{itemize}
+    \item Initialiser $ \pi ^0 $ avec une loi uniforme par rapport au nombre d'action disponible dans chaque état et $ V^\pi _0 = 0 $ partout. Les états finaux vont rester à zéros tout le long.
     \item Simplifier et écrire la formule pour notre MDP, en particulier pour les états stochastiques ou non, la somme avec la proba peut disparaitre où bien se réduire.
     \item Tableau avec les états en colonne et les $ V^\pi_k (s) $ en ligne, on vas faire augmenter $ k $ 
     \item Appliquer la formule à chaque étape
@@ -370,9 +459,20 @@ Exemple d'une formule simplifiée : Voir TD9 Question 2 avec une marche aléatoi
     \pi (gauche | s_i) (r(s_i, g, s_{i-1}) + \gamma V_k^\pi (s_{i-1})) + \pi (droite | s_i) (r(s_i, d, s_{i+1}) = \gamma V_k^\pi (s_{i+1}))
 .\]
 
-Mise à jour de $ \pi $ : TODO
+Mise à jour de $ \pi $ : Utiliser la formule.
 
-value iterattion !!!! je crois que c'est juste une maj differente a partie de la valeur des etat, résumer \href{https://www.baeldung.com/cs/ml-value-iteration-vs-policy-iteration}{ça}  
-
+\subsection{Value iteration}
+Pareil mais :\begin{itemize}
+    \item Random value function (d'après internet)
+    \item pour la maj de $ V_k^pi $ on donne directe la valeur max. On n'évalue plus la politique mais on fait directement converger la Value fonction pour ensuite seulement choisir la politique
+    \[
+        V_{k+1}(s) = \max _a \sum_{s'}^{}P(s'|s, a)[r(s,a,s') + \gamma V_k (s')]
+    .\]
+    \item une update final de la politique uniquement après avoir fait converger la value function. Avec la même formule qu'en policy iteration.
+\end{itemize}
+Atoux \begin{itemize}
+    \item Algo plus simple
+    \item Plus lent à converger que policy iteration.
+\end{itemize}
 
 \end{document}

@@ -200,6 +200,7 @@ Précision et rappel
 \begin{itemize}
     \item \textbf{Moyenne des rangs inverse (MRR)} : moyenne de l'inverse du rang du premier document pertinent renvoyé sur l'ensemble des requêtes $ \frac{1}{\left| Q \right| } \sum_{q \in Q}^{} \frac{1}{rank_i} $ where $ \text{rank}_{i}$ refers to the rank position of the first relevant document for the i-th query.
     
-    \item \textbf{Discounted cumulative gain (DCG)}
+    \item \textbf{Discounted cumulative gain (DCG)} :  Somme pondéré par $ \frac{1}{\log_{2} (rang)} $ du score de pertinence des documents. $ DCG_p = score_1 + \sum_{i=1}^{p} \frac{score_i}{\log_{2} i} $ pour une requète. 
+    \item Normlized DCG : pour pouvoir faire une moyenne sur l'ensemble des requète il faut normaliser le DCG en utilisant le IDCG (liste idéale de résultat) $ nDCG_p = \frac{DCG_p}{IDCG_p} $ 
 \end{itemize}
 \end{document}

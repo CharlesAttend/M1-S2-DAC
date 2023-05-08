@@ -285,9 +285,9 @@ Kernel Tricks :
 
 Généralité SVM 
 \begin{itemize}
-    
-    \item  The support vectors are the data points that lie on the margin, which is the region between the decision boundary and the closest data points of each class. Support vectors are critical in SVM because they determine the location and orientation of the decision boundary. All other data points that are not support vectors are not used to construct the decision boundary, which means that SVM is robust to noise and outliers in the data.
+    \item The support vectors are the data points that lie on the margin, which is the region between the decision boundary and the closest data points of each class. Support vectors are critical in SVM because they determine the location and orientation of the decision boundary. All other data points that are not support vectors are not used to construct the decision boundary, which means that SVM is robust to noise and outliers in the data.
     \item La taille de la marge est un hyper-paramètre important : marge grande == underfitting // marge petite == overfitting (séparation linéaire plus proche des points, moins centrée)
+    \item $ K $ petit = $ K \sum_{}^{}\xi  $ petit = petite pénalisation des erreur = tolérance de celle ci = underfitting // inverse
 \end{itemize}
 
 \section{Réseau de neurone}
@@ -442,6 +442,12 @@ Policy itération : policy evaluation + policy improvement, and the two are repe
         \pi _{k+1}(s) = argmax_a \sum_{s'}^{} P(s' | s, a) [ r(s, a, s') + \gamma V^{k}(s')]
     .\]
     \item L'étape d'évaluation de la policy est couteuse. On peut la skip en évaluant directement chaque action pendant l'entrainement, ça fait sauter la première somme dans la formule donnant l'algo de Policy Itératio
+    \item Convergence par le théorème de la convergence monotone de Howard. Condition \begin{itemize}
+        \item L'environnement doit être fini et le processus de décision de Markov (MDP) doit être stationnaire, c'est-à-dire que les probabilités de transition et les récompenses associées ne changent pas au fil du temps.
+        \item L'algorithme doit être initialisé avec une politique arbitraire.
+        \item Les valeurs initiales des états doivent être fixées à zéro.
+        \item Le coefficient de discount (gamma) doit être strictement inférieur à 1.
+    \end{itemize}
 \end{itemize}
 
 

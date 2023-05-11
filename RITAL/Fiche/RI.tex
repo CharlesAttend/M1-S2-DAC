@@ -203,4 +203,43 @@ Précision et rappel
     \item \textbf{Discounted cumulative gain (DCG)} :  Somme pondéré par $ \frac{1}{\log_{2} (rang)} $ du score de pertinence des documents. $ DCG_p = score_1 + \sum_{i=1}^{p} \frac{score_i}{\log_{2} i} $ pour une requète. 
     \item Normlized DCG : pour pouvoir faire une moyenne sur l'ensemble des requète il faut normaliser le DCG en utilisant le IDCG (liste idéale de résultat) $ nDCG_p = \frac{DCG_p}{IDCG_p} $ 
 \end{itemize}
+
+\section{Apprentissage de model}
+\begin{itemize}
+    \item Distillation : Faire apprendre un premier modèle moins gourmand en ressource, qui fera beaucoup de faux négatif, puis entrainer un autre modèle par dessus ces prédictions $\rightarrow$ plus robuste au bruit car il est pas directement exposé au faux negatif. Très efficace
+\end{itemize}
+\subsection{Modèle dense / de représentation}
+\begin{itemize}
+    \item Représenter la query et l'input dans un espace latent (le même ou non) de même taille puis score de similarité (cos ou autre)
+    \item \textbf{Gros overfit} car augmenter le score $ \Leftrightarrow $ augmenter la norme et espace assez grand pour overfit chaque doc
+    \item \textbf{forward lent}
+    \item Technique de clusterisation : \begin{itemize}
+        \item Pour eviter l'overfit pendant l'apprentisage batch uniquement du même cluster
+        \item Pour faire moins de produit scalaire car couteux, produit scalaire avec représentatn des clusters
+    \end{itemize}
+\end{itemize}
+
+\subsection{Modèle d'intération}
+\begin{itemize}
+    \item Intération faible : matrice pour faire la similarité into NN score (marchait pas beaucoup)
+    \item Intéraction forte : concaténation de la query et du doc into NN score (cross encoder)
+    \item Cross Encoder : Transformer + input concat query doc $\rightarrow$ Classifier linéaire sur la sortie en grande dimension $\rightarrow$ score ; gourmand mais performant 
+    \item Mécanisme en deux temps : gros tri avec un pré-traitement, et ordonancement avec le modèle d'interaction forte
+\end{itemize}
+\subsection{Modèle sparce}
+\begin{itemize}
+    \item Rien compris
+    \item Doc2query : Doc $\rightarrow$ Question sur le doc $\rightarrow$ concaténation de la question et du doc $\rightarrow$ amélioration des performances de recherche !
+    \item CCL:  Bon résultat, mieux que BM25, robuste ; un peu lourd à apprendre ; pour arriver à l'état de l'art il faut quand même ajouter un cross encoder en 2ème étape
+\end{itemize}
+
+\section{Page Rank}
+\begin{itemize}
+    \item Analyse les liens entre les pages, graph orienté de page
+    \item On veut trouver la distribution stationnaire $ s $ du graph (comme dans markov chain)
+    \item $ A $ matrice d'ajascence avec $ a_{ij} = 1$ si lien de $ i $ ver $ j $, $ d_i = \sum_{j}^{} a_{ij} $ nombre de lien entrant pour une page, $ P $ matrice de transition avec $ p_{ij} = \frac{a_{ij}}{d_i}$ proba de transition de $ j $ à $ i $ 
+    \item $ s_j = d \sum_{i}^{}p_{ij} s_i + (1 - d) a_j, d$ facteur d'armotissement ($ \approx 0.8 $ )
+    \item $ s = dsP + (1-d)a $ 
+\end{itemize}
+
 \end{document}

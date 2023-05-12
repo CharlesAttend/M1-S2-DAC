@@ -53,15 +53,19 @@
     \item RI ad-hoc : c'est ce qu'on fait : trouver parmi un ensemble d'articles ceux qui concernent un sujet spécifique.
     \item Indexation = encodage des documents avec un modèle RI
     \item Deux types d'index \begin{itemize}
-        \item Index normal : Document : (terme, nombre)
-        \item Index inversé : Mot : (document, nombre)
+        \item Index normal : Document : (terme, nombre/score)
+        \item Index inversé : Mot : (document, nombre/score)
     \end{itemize}
+    \item Requete sur index : on somme les scores pour obtenir le score final d'un document
     \item Stemming : ne garde que la racine des mots, un peu moche 
     \item Lematization : retour vers un mot complet
     \item Strategie de recherche : \begin{itemize}
         \item Problème : On a beaucoup de doc, on cherche les K premiers
         \item Deux strat  pour index inversé : \begin{itemize}
-            \item TAAT : traiter les terme un par un, fonctionne bien sur des petits corpus où il y a une grande différence de score
+            \item TAAT : traiter les terme un par un, fonctionne bien sur des petits corpus où il y a une grande différence de score \begin{enumerate}
+                \item Trier l'index de chaque terme par score croissant -> une grosse liste ordonnée terme puis score 
+                \item Parcourir par terme et maintenir un dictionnaire avec les scores par document, optimisation : utilisation d'une Heap
+            \end{enumerate}
             \item DAAT : traiter les doc un par un, plus efficace pour les grandes collections, plus 
         \end{itemize}
     \end{itemize}
@@ -88,14 +92,17 @@ Avec $ V $ taille du vocabulaire, $ N $ taille du texte, $ K, \beta  $ paramètr
 
 \section{TF-IDF}
 \begin{itemize}
-    \item Term Frequency : Une pondération locale, nombre occurrences du terme dans le document
-    \item Inverse Document frequency : Une pondération globale, fréquence inverse décroit vers 0 si le terme apparait dans tous les documents $ \frac{N}{df(t_i)} $ avec $ df $ nombre de documents contenant le terme. 
-    \item TF-IDF : $ tf * idf $, il existe plein de variance
+    \item Term Frequency : Une pondération locale, fréquence du terme dans le document $ \frac{f_{t,d}}{\sum_{t' \in d}^{} f_{t', d}} $ 
+    \item Inverse Document frequency : Une pondération globale, fréquence inverse décroit vers 0 si le terme apparait dans tous les documents $ \log_{} \frac{N}{df(t_i)} $ avec $ df $ nombre de documents contenant le terme, $ N $ nombre de document. 
+    \item TF-IDF : $ tf * idf $, il existe plein de variance. En particulier en TD on a fait un "count idf" : $ f_{t,d} \log_{} \frac{N}{n_t}, n_t = $ nombre de document où $ t $ est présent.
 \end{itemize}
 
 
 \section{Modèle booléen}
+formule logique into score binaire, pas de pondération rien
 \section{Modèle vectoriel}
+Score de distance entre deux vecteurs : un de document score (classiquement un tf) et celui de la requète (classiquement binaire par terme). Inner product $ <X,Y> $, cosinus $ \frac{<X,Y>}{\left\| X \right\| \left\| Y \right\| } $ 
+
 \section{Modèle probabiliste}
 Soit $ R $ une v.a.r binaire pour un dociment $ d $ est pertinent pour la question $ q $. 
 \begin{itemize}
@@ -103,7 +110,7 @@ Soit $ R $ une v.a.r binaire pour un dociment $ d $ est pertinent pour la questi
     \item Par bayes on tombe sur $ P(d | R, q) P(R | q ) $.
     \item Un document se décompose en terme \textbf{indépendant} de cette manière  $d : (\bigwedge_{t \in d} ) \wedge (\bigwedge_{t \not \in d} t \not \in d)$
     \item $ \prod_{t \in d}^{} P(t \in d | R, q) \prod_{t \not\in d} P(t \not \in d | R, q) P( R | q) $
-    \item Et on peut estimer la proba qu'un terme apparaisse dans un document $ p_t = P(t \in d | R, q), 1 - p_t = P(t \not\in d | R, q) $.
+    \item Et on peut estimer la proba qu'un terme apparaisse dans un document pertinent $ p_t = P(t \in d | R, q), 1 - p_t = P(t \not\in d | R, q) $. 
     \item Finalement on peut développer un peu avec un tricks sur le produit et virer les constantes\begin{align*}
         P(R | d,q) &= P(R|q) \prod_{t \in d} p_t \prod_{t \not\in d} 1 - p_t \\
                 &= P(R | q) \prod_{t \in d}^{} p_t \frac{1}{1 - p_t} \prod_{t \in \mathcal{T}}^{} 1 - p_t \\ 
@@ -113,6 +120,16 @@ Soit $ R $ une v.a.r binaire pour un dociment $ d $ est pertinent pour la questi
     \[
         s(q,d) = \sum_{t \in q \sqcap d}^{} \log \frac{p_t (1 - u_t)}{u_t (1 - p_t)}
     .\]
+    En pratique : $ s(q,d) = \sum_{t \in q \sqcap d}^{} \log_{} \frac{a + 0.5}{c + O.5} \frac{d + 0.5}{b+0.5} $ avec $a=$nb appartition terme dans doc pertinent, $b$ nb apparition terme dans document non pertinent, $c$ nb de \textbf{non} apparitition dans document pertinent et $d$ nb \textbf{non} apparition terme dans document non pertinenet
+    \begin{table}[!ht]
+        \centering
+        \begin{tabular}{|l|l|l|}
+        \hline
+            ~ & Doc Pertinent & Non Pertinent \\ \hline
+            $t \in d$ & a & b \\ \hline
+            $t \not\in d$ & c & d \\ \hline
+        \end{tabular}
+    \end{table}
     \item On estime les proba par max vraissemblance qui donne juste la fréquence des termes
     \item On peut intégré un prior sur $ P(d) $ mais je sais honnetement pas à quelle étape : longueur du doc, longueur moyenne des mots, date, nombre de lien, pagerank
 \end{itemize}
@@ -137,6 +154,10 @@ document et la distribution des termes dans la collection = Dirichlet ou Jelinek
 Recalculer les poids des document en fonction du feedback des users et recalculer des nouveaux score. Modèle de Rocchio pour les modèles vectoriel \begin{itemize}
     \item Par le retour de l'utilisateur, deux ensembles de vecteur de document : les documents pertinent VS les non pertinents
     \item Vecteur moyen des documents pertinent $\rightarrow$ Correction de notre vecteur de question 
+    \[
+        q_{new} = a q_{old} + b * d^+ - c d^-
+    .\]
+    avec $ d^+ $ le vecteur moyen des documents pertinents, same pour $ d^- $. Puis binariser q avec un seuil
 \end{itemize}
 Limite : 
 \begin{itemize}

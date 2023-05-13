@@ -74,11 +74,11 @@
 
 
 \section{Loi de Zipf}
-Stipule que la fréquence d'occurrence d'un mot est inversement proportionnelle à celle de son rang. Le 1er mot est environ 2 fois plus fréquent que le 2nd qui est 2 fois plus fréquent que le 3e etc.. 
+Stipule que la fréquence d'occurrence d'un mot est inversement proportionnelle à celle de son rang dans la liste des mots classés par fréquence. Les mot les plus fréquent sont beaucoups plus fréquents que moins fréquent. Le 1er mot est environ 2 fois plus fréquent que le 2nd qui est 2 fois plus fréquent que le 3e etc.. 
 \[
-    \frac{ \frac{1 }{r^s}}{ \sum_{n=1}^{N} \frac{1}{N}} \approx \frac{1}{r^s}
+    \frac{ \frac{1 }{r^s}}{ \sum_{n=1}^{N} \frac{1}{N}} \approx \frac{1}{r^s}, frequence = \frac{\lambda }{rank}
 .\]
-Avec $ r $ le rang, $ N $ la taille du corpus et $ s $ un paramètre spécifique au corpus
+Avec $ r $ le rang, $ N $ la taille du corpus et $ s $ un paramètre spécifique au corpus.
 
 \section{Loi de Heaps}
 Lien entre le nombre de mots distinct et le nombre de mots : \begin{itemize}
@@ -256,7 +256,7 @@ Précision et rappel
 
 \section{Page Rank}
 \begin{itemize}
-    \item Analyse les liens entre les pages, graph orienté de page
+    \item Analyse les liens entre les pages, graph orienté de page. une page a un PageRank d'autant plus important qu'est grande la somme des PageRanks des pages qui pointent vers elle
     \item On veut trouver la distribution stationnaire $ s $ du graph (comme dans markov chain) représentant l'importance de chaque page.
     \item $ A $ matrice d'ajascence avec $ a_{ij} = 1$ si lien de $ i $ ver $ j $, $ d_i = \sum_{j}^{} a_{ij} $ nombre de lien entrant pour une page, $ P $ matrice de transition avec $ p_{ij} = \frac{a_{ij}}{d_i}$ proba de transition de $ j $ à $ i $ 
     \item $ s_j = d \sum_{i}^{}p_{ij} s_i + (1 - d) a_j, d$ facteur d'armotissement ($ \approx 0.8 $ )

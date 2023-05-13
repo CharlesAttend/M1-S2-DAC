@@ -124,15 +124,17 @@ Scalable, attention sensible au dimension
 
 \section{Unsupervised approches}
 \subsection{LSA : Latent Semantic Analysis}
-On un un vocabulaire de taille $ d $, $ N $ document, une LSA avec $ k $ greatest singular values.
+But : réduire la dimension, réduidre le bruit.
+On un un vocabulaire de taille $ d $, $ N $ document, une LSA avec $ k $ plus grande valeur propre, qui forme $ k $ grand "concept" du corpus.
 
-On décompose la matrice $ X \in \mathbb{Q}^{N \times d}$ en \begin{itemize}
-    \item $ U \in \mathbb{R}^{k \times d} $ : une ligne de $ U $ représente un vecteur de poids par mot. Les poids les plus haut donne la classe du document (?)
-    \item $ \Sigma \in \mathbb{R}^{k \times k} $
-    \item $ V \in \mathbb{R}^{d \times k} $ Un colonne de $ V $ représente le champs lexical d'une classe (?). C'est les mots les plus important.
+On décompose la matrice des occurence $ X \in \mathbb{Q}^{N \times d}$ en \begin{itemize}
+    \item $ U \in \mathbb{R}^{k \times d} $ : une ligne de $ U $ représente un vecteur de poids par mot dans chacun des $ k $ concept.
+    \item $ \Sigma \in \mathbb{R}^{k \times k} $ valeur propre $\rightarrow$ \textbf{Tri par ordre croissant}pour garder les $k$ plus grande valeur (comme en BIMA)
+    \item $ V \in \mathbb{R}^{d \times k} $ Un colonne de $ V $ représente l'intensité des relations entre le document $j$ et chaque concept
     \item Est-ce que $ V $ et $ U $ sont pareil ?? 
-    \item Comment on classif un nouveau document la dedans ? 
+    \item Comment on classif un nouveau document la dedans ? Soit $ q $ un nouveau document ou une query, $ \hat{q} = \sigma ^{-1} U^{-1} q $ 
 \end{itemize}
+Un ligne de la matrice de la matrice d'ocurence $ t_i $, une colonne $ d_i $. $ t_i^T t_p $ corrélation de ces deux terme sur tout le corpus $\rightarrow X X^t$. $ d_j^T d_q $ corrélation entre ces deux document pour tout terme $\rightarrow X^T X$
 
 \subsubsection{Stength and drawbacks}
 \begin{itemize}
@@ -142,6 +144,8 @@ On décompose la matrice $ X \in \mathbb{Q}^{N \times d}$ en \begin{itemize}
         \item Problème forme négative 
     \end{itemize}
     \item Problème avec les mots rare dans les petits corpus (?)
+    \item Peu combiner des dimension qui non pas de lien entre elle (combiner linéairement voiture et camion ok mais pas voiture et bouteille)
+    \item Mauvaise prise en compte des doubles sens des mots, car un mot = un point de l'espace sémantique
 \end{itemize}
 
 \subsection{Kmean}

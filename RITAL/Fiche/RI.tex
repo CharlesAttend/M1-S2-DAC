@@ -116,7 +116,7 @@ Soit $ R $ une v.a.r binaire pour un dociment $ d $ est pertinent pour la questi
                 &= P(R | q) \prod_{t \in d}^{} p_t \frac{1}{1 - p_t} \prod_{t \in \mathcal{T}}^{} 1 - p_t \\ 
                 &\propto \prod_{t \in d}^{} p_t \frac{1}{1 - p_t}
     \end{align*}
-    \item De base le model pose $ \frac{P(R | q, d)}{P(\not R | q, d)} $, même développement qu'au dessus, puis passage au log pour obtenir un score 
+    \item De base le model pose un rapport de vraissemblance pour avoir un score $ \frac{P(R | q, d)}{P(\not R | q, d)} $, même développement qu'au dessus, puis passage au log. 
     \[
         s(q,d) = \sum_{t \in q \sqcap d}^{} \log \frac{p_t (1 - u_t)}{u_t (1 - p_t)}
     .\]

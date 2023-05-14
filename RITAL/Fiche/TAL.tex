@@ -49,6 +49,7 @@
 \maketitle
 
 \section{Généralité}
+Le fossé sémantique, ou "semantic gap", désigne l'écart entre les représentations de bas niveau des données (par exemple, les caractéristiques syntaxiques ou les mots individuels) et les représentations de haut niveau (par exemple, la signification ou le contexte) qui sont plus proches de la compréhension humaine. 
 \paragraph*{Métrique}
 \begin{itemize}
     \item Taux de reconnaissance : $ \frac{bonne pred}{total pred} $ 
@@ -101,13 +102,18 @@ Avantage :
     \item Opportunity to enrich (Context encoding, Part Of Speech)
     \item Efficient implementation
     \item Still very effective with classification
+    \item Simple à mettre en œuvre, facile à interpréter, conserve la fréquence des mots.
 \end{itemize}
 Limite : 
 \begin{itemize}
+    \item Ne capture pas l'ordre des mots, génère des vecteurs de grande taille, peut être sensible au bruit.
     \item Loose document / sentence structure : mitigated with N-gram
     \item Several task missing : POS tagging, text generation
     \item Semantic gap : On peut pas utiliser la distance euclidienne pour mesurer la différence sémantique
 \end{itemize}
+Représentation en tri-grammes de lettres :\\
+Avantages : Capture les motifs locaux et les sous-chaînes fréquentes, réduit la taille du vocabulaire, résilient aux fautes d'orthographe. capturer des motifs spécifiques à un auteur.\\
+Inconvénients : Peut générer du bruit, perd la signification des mots complets, moins interprétable.
 
 \subsection{Classification}
 \paragraph*{Naive Bayes}
@@ -124,7 +130,7 @@ Scalable, attention sensible au dimension
 
 \section{Unsupervised approches}
 \subsection{LSA : Latent Semantic Analysis}
-But : réduire la dimension, réduidre le bruit.
+But : réduire la dimension, réduidre le bruit. Hyperparamètres : Nombre de sujets, hyperparamètres de la distribution de Dirichlet
 On un un vocabulaire de taille $ d $, $ N $ document, une LSA avec $ k $ plus grande valeur propre, qui forme $ k $ grand "concept" du corpus.
 
 On décompose la matrice des occurence $ X \in \mathbb{Q}^{N \times d}$ en \begin{itemize}
@@ -167,9 +173,10 @@ Comme d'hab, à combo avec LSA pour réduire les dimensions.
 \end{center}}
 
 \subsection{Words2Vec}
-
+Apprendre des représentations vectorielles des mots (word embeddings) en exploitant les relations contextuelles entre les mots.
 Implémentation de l'idée précédente : Modèle auto-supervisé, input OH encoding ; + backpropagation 
 \begin{itemize}
+    \item Réseau de neurone peu profond pour :
     \item CBoW : Predict surrounding words (context) from central word ; work well for frequent words
     \item Skipgram : Predict context from central word ; work well for rare words
 \end{itemize}
@@ -177,6 +184,7 @@ On note : \begin{itemize}
     \item Soft max en sortie sur $ \left| V \right|  $ (taille du vocab) valeur $\rightarrow$ Lourd $\rightarrow$ Evitable par négative sampling je crois ??
     \item Analogie dans l'espace latent $ H $ : Féminin/Masculin, Capitale, sémantique 
     \item \textbf{Difficulté pour aller au delà des mots} : Comment encoder une phrase entière dans $H$ $\rightarrow$ moyenne, sommes, min, max
+    \item Hyperparamètres : Taille du vecteur, fenêtre contextuelle, nombre d'itérations, taux d'apprentissage.
 \end{itemize}
 
 \begin{figure}[htbp]

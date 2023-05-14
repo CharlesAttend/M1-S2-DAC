@@ -1,6 +1,6 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage[a4paper, margin=2.5cm]{geometry}
+\usepackage[a4paper, margin=1.25cm]{geometry}
 \usepackage{graphicx}
 \usepackage[french]{babel}
 
@@ -10,6 +10,9 @@
 \usepackage{amsmath}
 \usepackage{amsthm}
 \usepackage{systeme}
+\usepackage{multicol}
+\usepackage{sectsty}
+\usepackage{titlesec}
 
 \usepackage{hyperref}
 \hypersetup{
@@ -22,31 +25,230 @@
     }
 \urlstyle{same} %\href{url}{Text}
 
-\theoremstyle{plain}% default
-\newtheorem{thm}{Théorème}[section]
-\newtheorem{lem}[thm]{Lemme}
-\newtheorem{prop}[thm]{Proposition}
-\newtheorem*{cor}{Corollaire}
-%\newtheorem*{KL}{Klein’s Lemma}
+% \titleformat{\section}[runin]{\footnotesize\bfseries\sffamily}{\thesection}{1em}{}
 
-\theoremstyle{definition}
-\newtheorem{defn}{Définition}[section]
-\newtheorem{exmp}{Exemple}[section]
-% \newtheorem{xca}[exmp]{Exercise}
+% \titleformat{\subsection}[runin]{\footnotesize\bfseries\sffamily}{\thesubsection}{1em}{}[]
+% \titleformat{\subsubsection}[runin]{\footnotesize\bfseries\sffamily}{\thesubsubsection}{1em}{}[]
+% \titleformat{\paragraph}[runin]{\footnotesize\bfseries\sffamily}{\theparagraph}{1em}{}[]
+% \titleformat{\subparagraph}[runin]{\footnotesize\bfseries\sffamily}{\thesubparagraph}{1em}{}[]
 
-\theoremstyle{remark}
-\newtheorem*{rem}{Remarque}
-\newtheorem*{note}{Note}
-%\newtheorem{case}{Case}
 
-\graphicspath{{./RI/}}
+\titleformat{\section}[runin]{\normalfont\footnotesize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[runin]{\normalfont\footnotesize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]{\normalfont\footnotesize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\normalfont\footnotesize\bfseries}{\theparagraph}{1em}{}
+\titleformat{\subparagraph}[runin]{\normalfont\footnotesize\bfseries}{\thesubparagraph}{1em}{}
 
-\title{Fiche RI}
-\author{Charles Vin}
-\date{2023}
+\titlespacing*{\section}{0pt}{0.8mm}{0.1mm}
+\titlespacing*{\subsection}{0pt}{0.1mm}{0.1mm}
 
 \begin{document}
-\maketitle
+\footnotesize
+\begin{multicols}{2}
+
+    \section{Généralité}
+    Voir la fiche RI pour : métrique, zipf law, tf-idf
+
+    Le fossé sémantique, ou "semantic gap", désigne l'écart entre les représentations de bas niveau des données (par exemple, les caractéristiques syntaxiques ou les mots individuels) et les représentations de haut niveau (par exemple, la signification ou le contexte) qui sont plus proches de la compréhension humaine. 
+
+    \paragraph*{Problème d'équilibre des classes}
+    \begin{itemize}
+        \item Accuracy poubelle $\rightarrow$ Utiliser les autres metrics : AUC / ROC
+        \item Ré-équilibrer le jeux de données : supprimer des données dans la classe majoritaire 
+        \item Fonction de coût : pénaliser plus les erreurs dans la classe minoritaire (cours 1 diapo 51)
+    \end{itemize}
+
+    \paragraph*{Problème de dimension}
+    Ajouter un terme sur la fonction coût (ou vraisemblance) pour pénaliser le nombre (ou le poids) des coefficients utilisés pour la décision. (Cours 1 diapo 50)
+
+    \paragraph*{TF-IDF encoding} if word k is in most documents, it is probably useless $\rightarrow$ TF-Idf encoding : Donne plus de poids au keyword et un petit peu moins au stopword. A combiner avec blacklist. Plus d'info dans la fiche RI
+    
+    \section{Liste des pré-processing}
+    \subsection{Noisy entity removal}
+    \begin{itemize}
+        \item Ponctuation, capital/lower case
+        \item Stop word 
+        \item Rare word (less than a threshold)
+    \end{itemize}
+    
+    \subsection{Text Normalization}
+    \begin{itemize}
+        \item Lemmatization : Lions $\rightarrow$ Lion, are $\rightarrow$ be
+        \item Stemming
+    \end{itemize}
+    
+    \subsection{Word standardisation}
+    Regular expression, e.g. for removing "." or expanding words’ contractions ("I’ll" → "I will")
+    
+    
+    \section{Bag of Word}
+    
+    \subsection{Stengths and drawbacks}
+    Avantage : 
+    \begin{itemize}
+        \item Easy light fast 
+        \item Opportunity to enrich (Context encoding, Part Of Speech)
+        \item Efficient implementation
+        \item Still very effective with classification
+        \item Simple à mettre en œuvre, facile à interpréter, conserve la fréquence des mots.
+    \end{itemize}
+    Limite : 
+    \begin{itemize}
+        \item Ne capture pas l'ordre des mots, génère des vecteurs de grande taille, peut être sensible au bruit.
+        \item Loose document / sentence structure : mitigated with N-gram
+        \item Several task missing : POS tagging, text generation
+        \item Semantic gap : On peut pas utiliser la distance euclidienne pour mesurer la différence sémantique
+    \end{itemize}
+    Représentation en tri-grammes de lettres :\\
+    Avantages : Capture les motifs locaux et les sous-chaînes fréquentes, réduit la taille du vocabulaire, résilient aux fautes d'orthographe. capturer des motifs spécifiques à un auteur.\\
+    Inconvénients : Peut générer du bruit, perd la signification des mots complets, moins interprétable.
+    
+    \subsection{Classification}
+    \paragraph*{Naive Bayes}
+    Rapide, interprétable, naturellement multiclasse. Perf à améliorer. Bien filtrer les stop word. Extention par robustesse (?)
+    
+    \paragraph*{Classifieur linéaire}
+    Scalable, attention sensible au dimension
+    
+    \section{Apprendre la sémantique}
+    \begin{itemize}
+        \item Première approche : WordNet : trop statique (nouvelle expression, hashtag, vocab tecnique) et fait à la main 
+        \item Deuxième approche : Mesure de co-occurence : "Fair \textbf{and} legitimate", "Fair \textbf{but} brutal" $\rightarrow$ Marche bien + combo avec BoW
+    \end{itemize}
+    
+    \section{Unsupervised approches}
+    \subsection{LSA : Latent Semantic Analysis}
+    But : réduire la dimension, réduidre le bruit. Hyperparamètres : Nombre de sujets, hyperparamètres de la distribution de Dirichlet
+    On un un vocabulaire de taille $ d $, $ N $ document, une LSA avec $ k $ plus grande valeur propre, qui forme $ k $ grand "concept" du corpus.
+    
+    On décompose la matrice des occurence $ X \in \mathbb{Q}^{N \times d}$ en \begin{itemize}
+        \item $ U \in \mathbb{R}^{k \times d} $ : une ligne de $ U $ représente un vecteur de poids par mot dans chacun des $ k $ concept.
+        \item $ \Sigma \in \mathbb{R}^{k \times k} $ valeur propre $\rightarrow$ \textbf{Tri par ordre croissant}pour garder les $k$ plus grande valeur (comme en BIMA)
+        \item $ V \in \mathbb{R}^{d \times k} $ Un colonne de $ V $ représente l'intensité des relations entre le document $j$ et chaque concept
+        \item Est-ce que $ V $ et $ U $ sont pareil ?? 
+        \item Comment on classif un nouveau document la dedans ? Soit $ q $ un nouveau document ou une query, $ \hat{q} = \sigma ^{-1} U^{-1} q $ 
+    \end{itemize}
+    Un ligne de la matrice de la matrice d'ocurence $ t_i $, une colonne $ d_i $. $ t_i^T t_p $ corrélation de ces deux terme sur tout le corpus $\rightarrow X X^t$. $ d_j^T d_q $ corrélation entre ces deux document pour tout terme $\rightarrow X^T X$
+    
+    \subsubsection{Stength and drawbacks}
+    \begin{itemize}
+        \item Bon combo avec t-SNE.
+        \item Entièrement basé sur BoW : même problème  plus +\begin{itemize}
+            \item Not robust to stop word (=high singular values)
+            \item Problème forme négative 
+        \end{itemize}
+        \item Problème avec les mots rare dans les petits corpus (?)
+        \item Peu combiner des dimension qui non pas de lien entre elle (combiner linéairement voiture et camion ok mais pas voiture et bouteille)
+        \item Mauvaise prise en compte des doubles sens des mots, car un mot = un point de l'espace sémantique
+    \end{itemize}
+    
+    \subsection{Kmean}
+    Comme d'hab, à combo avec LSA pour réduire les dimensions. 
+    \subsection{Dérivé LSA}
+    \begin{itemize}
+        \item P-LSA : K-mean mais avec un assignement soft mesurer par la probabilité
+        \item LDA : On rajoute un prior : modèle plus complexe $\rightarrow$ Les méthodes EM  $\rightarrow$ on utilise MCMC pour estimer les vraissemblance
+        \item D'autre extension bien complexe
+    \end{itemize}
+    
+    
+    
+    
+    
+    \section{Word Embeddings \& Neural network}
+    {\large \begin{center}
+    \textit{Word that appear in similar contexts in text tend to have similar meanings}
+    \end{center}}
+    
+    \subsection{Words2Vec}
+    Apprendre des représentations vectorielles des mots (word embeddings) en exploitant les relations contextuelles entre les mots.
+    Implémentation de l'idée précédente : Modèle auto-supervisé, input OH encoding ; + backpropagation 
+    \begin{itemize}
+        \item Réseau de neurone peu profond pour :
+        \item CBoW : Predict surrounding words (context) from central word ; work well for frequent words
+        \item Skipgram : Predict context from central word ; work well for rare words
+    \end{itemize}
+    On note : \begin{itemize}
+        \item Soft max en sortie sur $ \left| V \right|  $ (taille du vocab) valeur $\rightarrow$ Lourd $\rightarrow$ Evitable par négative sampling je crois ??
+        \item Analogie dans l'espace latent $ H $ : Féminin/Masculin, Capitale, sémantique 
+        \item \textbf{Difficulté pour aller au delà des mots} : Comment encoder une phrase entière dans $H$ $\rightarrow$ moyenne, sommes, min, max
+        \item Hyperparamètres : Taille du vecteur, fenêtre contextuelle, nombre d'itérations, taux d'apprentissage.
+    \end{itemize}
+    
+    \subsubsection{Glove}
+    \begin{itemize}
+        \item Input : matrice de co-occurence + accès aux word embeding
+        \item On veut explicitement que la proximité dans l'espace latent représente la co-occurence des mots
+        \item Fonction de cout et de prédiction de GloVe $ \approx  $ PLSA (espace latent pour les co-ocurences) + Contexte local + les words embeding 
+    \end{itemize}
+    
+    \subsection{Neural Networks}
+    \subsubsection{CNN}
+    How to scale/classify with Word Embeding ? $\rightarrow$ Convolutional Neural networks
+    \begin{enumerate}
+        \item Latent représentation of the word 
+        \item Couche de convolution
+        \item $\rightarrow$ Une représentation d'un document dans une dimension fixe
+        \item $\rightarrow$ Classication : Régréssion, NN w/ soft max, ...
+    \end{enumerate}
+    + une back propagation sur la layer de convolution, l'espace de représentation latent. 
+    
+    \textbf{Problème} : 2 mois de train 
+    
+    \subsubsection{RNNs}
+    \begin{itemize}
+        \item Code des séquences \textbf{entière} => parfait pour du texte
+        \item Forme de mémoire du passé dans le réseau
+        \item Problème de profondeur et d'évanouissement du gradient
+    \end{itemize}
+    3 types de classification :
+    \begin{itemize}
+        \item One to many : Image captionning (input une image, sortie plusieurs mots)
+        \item Many to one : Sentiment clasification, Question answering (how many ...)
+        \item Many to many : Text generation, translation (input anglais sortie français), speech2text 
+    \end{itemize}
+    Evolution : 
+    \begin{itemize}
+        \item Architecture spéciale contre la disparition du gradient : LSTM, GRU == long term memory 
+        \item Bi-directionnal RNNs : incorporate information from words both preceding and following
+    \end{itemize}
+    Toujours problème d'évanouissement du gradient + goulot d'étranglement pour encoder tout une phrase
+    
+    \subsection{Attention model \& Transformers }
+    \begin{itemize}
+        \item Encode l'information globale (!= CNN que local)
+        \item Matrice d'attention == encodage de \begin{itemize}
+            \item Chaque mot encodé avec Key, Query, Value
+            \item la similarité de chaque mot de la phrase
+            \item inclusion du contexte globale
+        \end{itemize} 
+        \item Multi-head attention : on stack en parallèle les self-attention layer + combinaison
+        \item Perte de la position : Fully connected layers: permutation invariant $\rightarrow$ Encodage manuel 
+    \end{itemize}
+    
+    \subsubsection{BERT}
+    Comme word2vec avec de l'attention : pré-train pour apprendre l'espace latent $\rightarrow$ Fine tune sur other task. 
+    
+    Token de classe CLS $t_0$ qui représente la phrase entière dans un espace latent $\rightarrow$ utile pour prédire la classe avec des modèle classique (regression ect) $\rightarrow$ \textbf{Plus le problème de W2V avec la moyenne ou la somme}
+    
+    \subsubsection{Transformers Decoder}
+    GPT
+    \begin{itemize}
+        \item Prédire le mot suivant en fonction du contexte.
+        \item Masked Attention: hide (mask) information about future tokens from the model. On donne la phrase au fur et à mesure pour pas tout apprendre d'un coup. On peut pas utiliser les mots d'après vu qu'on génère
+    \end{itemize}
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Généralité}
 \begin{itemize}
@@ -138,7 +340,6 @@ Soit $ R $ une v.a.r binaire pour un dociment $ d $ est pertinent pour la questi
 Si $ t \not\in d \Leftrightarrow TF_t = 0 $ puis avec une modelisation de poisson sur la valeur de ce terme, on retombe sur la formule du coef BM25. Woah qu'est ce que c'est que ce trucs c'est le futur à estimer les param de la poisson
 
 BM25 est un modèle de sac de mots qui ordonne les documents en fonction de la fréquence des termes qui apparaissent dans chaque document, indépendamment des relations pouvant exister entre ces termes ou de leurs proximités relatives au sein du document. Pour une requête $ Q $ contenant les mots $ q_1, \dots, q_n $, le score BM25 d'un document $ D $ est $ s(D,Q) = \sum_{i=1}^{n}IDF(q_i) \frac{f(q_i, D) (k_1 + 1)}{f(q_i, D) + k_1 (1 - b + b \frac{\left| D \right| }{avgdl})} $ avec $ f(q_i, D) = tf_i $  fréquence du terme $ q_i $ dans le document $ D $, $ \left| D \right|  $ Longueur du doc $ D $ (nombre de mot), $ avgdl $ longueur moyenne des documents de la collection, $ k_1 = 1.2, b = 0.75 $, $ IDF(q_i) = \log_{} \frac{N - n(q_i) + 0.5}{n(q_i) + 0.5} $ avec $ n(q_i) $ le nombre de document contenant $ q_i $ 
-
 \section{Modèle de langue }
 Basé sur l'idée que pour faire une recherche on imagine les mots que le documents pertinent vas contenir. Quel est la proba que le document soit généré par le même modèle de langue que le document.
 
@@ -212,12 +413,6 @@ Précision et rappel
     \item \textbf{Moyenne des précision moyenne (MAP)} = moyenne des précision moyenne pour chaque requette
     
 \end{itemize}
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics*[width=.5\textwidth]{precision_recall_conf_matrix.png}
-    \caption{En rouge la précision, en jaune le rappel}
-    \label{fig:precision_recall}
-\end{figure}
 
 \subsection{Métrique orientées rang}
 \begin{itemize}
@@ -270,5 +465,8 @@ Précision et rappel
         \item $ S_{n+1} = S_n * \hat{M} $ ou $ S_{n+1} = d SP + \frac{1- d}{N} $  
     \end{enumerate}
 \end{itemize}
+
+
+\end{multicols}
 
 \end{document}

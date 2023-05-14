@@ -49,16 +49,9 @@
 \maketitle
 
 \section{Généralité}
+Voir la fiche RI pour : métrique, zipf law, tf-idf
+
 Le fossé sémantique, ou "semantic gap", désigne l'écart entre les représentations de bas niveau des données (par exemple, les caractéristiques syntaxiques ou les mots individuels) et les représentations de haut niveau (par exemple, la signification ou le contexte) qui sont plus proches de la compréhension humaine. 
-\paragraph*{Métrique}
-\begin{itemize}
-    \item Taux de reconnaissance : $ \frac{bonne pred}{total pred} $ 
-    \item Précision pour une classe $ c $: $ \frac{N^C_{correct}}{N^C_{predits}} $ 
-    \item Rappel / Recall pour une classe $ c $ : $ \frac{N^C_{correct}}{N^C_{tot}} $
-    \item F1 : need plus de vulgarisation
-    \item ROC : Faux positif VS Vrais positif
-    \item AUC : 
-\end{itemize}
 
 \paragraph*{Problème d'équilibre des classes}
 \begin{itemize}
@@ -70,10 +63,7 @@ Le fossé sémantique, ou "semantic gap", désigne l'écart entre les représent
 \paragraph*{Problème de dimension}
 Ajouter un terme sur la fonction coût (ou vraisemblance) pour pénaliser le nombre (ou le poids) des coefficients utilisés pour la décision. (Cours 1 diapo 50)
 
-\paragraph*{TF-IDF encoding} if word k is in most documents, it is probably useless $\rightarrow$ TF-Idf encoding : Donne plus de poids au keyword et un petit peu moins au stopword. A combiner avec blacklist \textbf{EXPLIQUER PLUS LES MATH ?? car ça à l'air important on 'lutilise tout le temps}
-
-\paragraph*{Zipf law}
-
+\paragraph*{TF-IDF encoding} if word k is in most documents, it is probably useless $\rightarrow$ TF-Idf encoding : Donne plus de poids au keyword et un petit peu moins au stopword. A combiner avec blacklist. Plus d'info dans la fiche RI
 
 \section{Liste des pré-processing}
 \subsection{Noisy entity removal}
@@ -90,7 +80,7 @@ Ajouter un terme sur la fonction coût (ou vraisemblance) pour pénaliser le nom
 \end{itemize}
 
 \subsection{Word standardisation}
-Regular expression, e.g. for removing "." or expanding words’ contractions ("I’ll" → "I will")
+Regular expression, e.g. for removing "." or expanding words’ contractions ("I'll" $\rightarrow$ "I will")
 
 
 \section{Bag of Word}

@@ -25,25 +25,11 @@
     }
 \urlstyle{same} %\href{url}{Text}
 
-% \titleformat{\section}[runin]{\footnotesize\bfseries\sffamily}{\thesection}{1em}{}
-
-% \titleformat{\subsection}[runin]{\footnotesize\bfseries\sffamily}{\thesubsection}{1em}{}[]
-% \titleformat{\subsubsection}[runin]{\footnotesize\bfseries\sffamily}{\thesubsubsection}{1em}{}[]
-% \titleformat{\paragraph}[runin]{\footnotesize\bfseries\sffamily}{\theparagraph}{1em}{}[]
-% \titleformat{\subparagraph}[runin]{\footnotesize\bfseries\sffamily}{\thesubparagraph}{1em}{}[]
-
-
-\titleformat{\section}[runin]{\normalfont\footnotesize\bfseries}{\thesection}{1em}{}
-\titleformat{\subsection}[runin]{\normalfont\footnotesize\bfseries}{\thesubsection}{1em}{}
-\titleformat{\subsubsection}[runin]{\normalfont\footnotesize\bfseries}{\thesubsubsection}{1em}{}
-\titleformat{\paragraph}[runin]{\normalfont\footnotesize\bfseries}{\theparagraph}{1em}{}
-\titleformat{\subparagraph}[runin]{\normalfont\footnotesize\bfseries}{\thesubparagraph}{1em}{}
 
 \titlespacing*{\section}{0pt}{0.8mm}{0.1mm}
 \titlespacing*{\subsection}{0pt}{0.1mm}{0.1mm}
 \begin{document}
-\footnotesize
-\begin{multicols}{2}
+%\begin{multicols}{2}
 
 \section{Généralité}
 \begin{itemize}
@@ -193,12 +179,7 @@ Limite : \begin{itemize}
 $\rightarrow$ Solution : Estimation par noyaux
 
 \subsection{Estimation de densité par noyaux}
-\begin{figure}[htbp]
-    \centering
-    \includegraphics*[width=\textwidth]{./fig1.png}
-    \caption{Intuition de l'estimation par noyaux}
-    \label{intuitionnoyaux}
-\end{figure}
+
 Intuition figure \cite*{intuitionnoyaux} : Plutôt que de décider d'une discrétisation a priori, l'estimation est faîte en centrant une fenêtre autour du point d'intérêt $ x_0 $ (dans un espace de dimension $d$) à posteriori. $\rightarrow$ Problème : pas continue (si on bouge la boite et qu'un point rentre dedans, ça fait faire un saut à la fonction)
 
 \subsubsection{Fenêtre de Parzen}
@@ -541,12 +522,7 @@ Basicly, tu peux définir le résutlat de ton précessus gaussien uniquement par
 
 
 \section{Théorie de l'apprentissage}
-\begin{figure}[!htbp]
-    \centering
-    \includegraphics*[width=.65\textwidth]{biais-variance.png}
-    \caption{Variance = estimation error, biai = approximation error}
-    \label{<label>}
-\end{figure}
+
 \begin{itemize}
     \item Algorithme universellement consistant : risque de la fonction apprise converge vers le risque bayesien. Si on peut overfit sur n'importe quel jeu de donnée (comme un arbre de décision ou un réseau de neurone avec nombre de paramètre infiny).
     \item Biais : risque lié à la restriction de la taille de l'ensemble de fonction où on cherche la fonction optimal
@@ -619,9 +595,9 @@ Evaluation d'une politique $ \pi $
     \item Appliquer la formule à chaque étape
 \end{itemize}
 Exemple d'une formule simplifiée : Voir TD9 Question 2 avec une marche aléatoire. 
-\[
-    \pi (gauche | s_i) (r(s_i, g, s_{i-1}) + \gamma V_k^\pi (s_{i-1})) + \pi (droite | s_i) (r(s_i, d, s_{i+1}) = \gamma V_k^\pi (s_{i+1}))
-.\]
+  
+ \[  
+   \pi (gauche | s_i) (r(s_i, g, s_{i-1}) + \gamma V_k^\pi (s_{i-1}))  + \pi (droite | s_i) (r(s_i, d, s_{i+1}) = \gamma V_k^\pi (s_{i+1}))\]
 
 Mise à jour de $ \pi $ : Utiliser la formule.
 
@@ -639,5 +615,5 @@ Atoux \begin{itemize}
     \item Plus lent à converger que policy iteration.
 \end{itemize}
 
-\end{multicols}
+%\end{multicols}
 \end{document}

@@ -1,0 +1,643 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[a4paper, margin=1.25cm]{geometry}
+\usepackage{graphicx}
+\usepackage[french]{babel}
+
+\usepackage[default,scale=0.95]{opensans}
+\usepackage[T1]{fontenc}
+\usepackage{amssymb} %math
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{systeme}
+\usepackage{multicol}
+\usepackage{sectsty}
+\usepackage{titlesec}
+
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,      
+    urlcolor=cyan,
+    pdftitle={Overleaf Example},
+    % pdfpagemode=FullScreen,
+    }
+\urlstyle{same} %\href{url}{Text}
+
+% \titleformat{\section}[runin]{\footnotesize\bfseries\sffamily}{\thesection}{1em}{}
+
+% \titleformat{\subsection}[runin]{\footnotesize\bfseries\sffamily}{\thesubsection}{1em}{}[]
+% \titleformat{\subsubsection}[runin]{\footnotesize\bfseries\sffamily}{\thesubsubsection}{1em}{}[]
+% \titleformat{\paragraph}[runin]{\footnotesize\bfseries\sffamily}{\theparagraph}{1em}{}[]
+% \titleformat{\subparagraph}[runin]{\footnotesize\bfseries\sffamily}{\thesubparagraph}{1em}{}[]
+
+
+\titleformat{\section}[runin]{\normalfont\footnotesize\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}[runin]{\normalfont\footnotesize\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}[runin]{\normalfont\footnotesize\bfseries}{\thesubsubsection}{1em}{}
+\titleformat{\paragraph}[runin]{\normalfont\footnotesize\bfseries}{\theparagraph}{1em}{}
+\titleformat{\subparagraph}[runin]{\normalfont\footnotesize\bfseries}{\thesubparagraph}{1em}{}
+
+\titlespacing*{\section}{0pt}{0.8mm}{0.1mm}
+\titlespacing*{\subsection}{0pt}{0.1mm}{0.1mm}
+\begin{document}
+\footnotesize
+\begin{multicols}{2}
+
+\section{Généralité}
+\begin{itemize}
+    \item Fonction de perte : quantifie l'erreur associé à une décision. Erreur simple : A chaque fois qu'on se trompe, on compte 1 : 0-1 loss
+    \item Risque : Proba de se tromper, $ R(y_i | x) = \sum_{j}^{} l(y_i, y_j)P(y_j | x)$ = Moyenne de la Loss pondéré par les probas à post
+    \item Risque continue ? : $ R(f) = \int_{x \in \mathcal{X}}^{}R(f(x)|x)p(x) dx  $ ($ p(x) = ??? $ ) = Esperance du X sur notre domaine continue
+    \item iso-contours == courbe de niveau
+    \item Une epoque = on a vu une fois tous les exemples dans le gradient
+    \item Hinge-loss = $ \max (0, 1 - y f_w(x)) $ \begin{itemize}
+        \item the Hinge loss penalizes predictions y < 1, corresponding to the notion of a margin in a support vector machine.
+        \item When $ y $ and $ f_w(x) $ have the same sign (meaning y predicts the right class) and $ \left| f_w(x) \right| \geq 1 $ , the hinge loss $ = 0 $  When they have opposite signs, the hinge loss increases linearly with $ f_w(x) $  and similarly if $ \left| f_w(x) \right| \geq 1 $, even if it has the same sign (correct prediction, but not by enough margin).
+    \end{itemize}
+    \item Lorsque les données sont de petites dimensions, le risque de sur-apprentissage est plus petit.
+    \item Lors d'une batch de gradient, il n'est pas nécessaire de mélanger les exemples car tous les exemples sont utilisés dans chaque mise à jour de poids. VS En général, il est recommandé de mélanger les exemples lors d'une descente de gradient stochastique (SGD) afin de garantir une convergence plus rapide et une meilleure généralisation.
+    \item Langrangien : contrainte : $ \displaystyle g_i(x) = 0, h_j(x) \leq 0, \mathcal{L}(x, \lambda , \mu ) = f(x) - \sum_{i=1}^{p} \lambda _i g_i(x) - \sum_{j=1}^{q} \mu _j h_j(x)$
+    \item Condition d'optimalité KKT : x solution ssi $ \displaystyle \begin{cases}
+        \delta f(x^*) - \sum_{i=1}^{p} \lambda _i^* \Delta g_i(x^*) - \sum_{j=1}^{q} \mu _j^* \Delta  h_j(x^*)\\
+        \mu _j ^* \leq 0, j = 1, \dots, q \\
+        \mu _j^* h_j(x^*) = 0, j = 1, \dots, q
+    \end{cases}  $ 
+\end{itemize}
+
+\subsection{Point algèbre linéaire}
+$\displaystyle x \perp y \Leftrightarrow x \cdot y = 0 $ \\
+$\displaystyle \left\| x \right\| ^2 = x \cdot x = \sum_{i=1}^{n}x_i^2 $ \\ 
+$\displaystyle \text{Unit vector} = \frac{x}{\left\| x \right\| } $ \\
+$\displaystyle \text{With matrix : } x \cdot y = X^T Y $ \\
+$\displaystyle (Ax) \cdot y = x \cdot (A^T y) $ \\
+$\displaystyle \frac{d}{dt}(x \cdot y) = x \cdot \frac{dy}{dt} + \frac{dx}{dt}\cdot y $ \\
+$\displaystyle \text{Produit scalaire } <x,y> \text{ forme biliénaire symétrique défini positive} $ \\
+$\displaystyle \Leftrightarrow c <x, y> = <cx, y> = <x,cy>, <x,y> = <y,x>, c^2 < x,y> = <cx, cy> $ \\
+$\displaystyle \lambda  $ valeur propre  de $ M $ ssi $ Mx = \lambda x $ 
+
+\subsection{Descente de gradient}
+Point initial $ x_0 $ et $ \epsilon \geq 0 $.
+\begin{enumerate}
+    \item Calcul de $ \nabla f(x_k) $ 
+    \item Test d'arret : si $ \left\| \nabla f(x_k) \right\| \leq \epsilon  $ 
+    \item Calcul d'un pas $ \alpha _k > 0 $ par une règle de recherche linéaire en $ f $ en $ x_k $ le long de la direction $ - \nabla f(x_k) $ 
+    \item Nouvel itéré : $ x_{k+1} = x_k - \alpha _k \nabla f(x_k) $ 
+\end{enumerate}
+
+\subsection{Dérivé des matrices}
+\begin{align*}
+    \frac{\partial (vMv)}{\partial v} &= (M + M^T)V = 2MV \text{ si } M \text{ symétrique} \\
+    \frac{\partial (v^T a)}{\partial v} &= \frac{\partial (a^T v)}{\partial v} = a \\
+    \frac{\partial (\log_{} \det M)}{\partial v} &= M^{-1}\\
+    \frac{\partial (Tr(AM))}{\partial v} &= A
+\end{align*}
+
+\subsection{Multiplicateur de Lagrange}
+Soit $ f(x) $ fonction à optimiser, sous $ g(x) = 0 $ contraintes d'égalités. On pose : $ \mathcal{L}(x,\lambda) = f(x) - \lambda  (x)$ nouvelle fonction de plus grande dimension à optimiser comme on a l'habitude en annulant le gradient : $ \nabla _x \mathcal{L}(x,\lambda ) = 0 $. Légitiment on doit vérifier si le point est un min ou un max ou un point selle avec la matrice hessienne mais osef.
+
+\subsection{KKT \& contrainte d'inégalité}
+Version complete de Lagrange : Fonction objectif $ f $, $ g_i $ contrainte d'égalité, $ h_j $ contrainte d'inégalité tel que $ h_i(x) \leq 0 $. Fonction duale : $ \mathcal{L} (x, \lambda , \mu) = f(x) - \sum_{i=1}^{p} \lambda _i g_i(x) - \sum_{j=1}^{q} \mu _j h_j(x)$. Les condition KKT pour un point $ x^* $ extremum sont (aka résoudre le système)
+\[
+    \begin{cases}
+    \nabla \mathcal{L}(x^*, \lambda^* , \mu^* ) = 0 \\
+    \mu ^*_j \leq 0, j = 1, \dots, q \\
+    \mu ^*_j h_j(x^*) = 0, j =1, \dots, q
+    \end{cases} 
+.\]
+
+
+\section{Arbre de décision}
+Algo général : 
+\begin{enumerate}
+    \item Déterminer la meilleure caractéristique dans l'ensemble de données d'entraînement.
+    \item Diviser les données d'entraînement en sous-ensembles contenant les valeurs possibles de la meilleure caractéristique.
+    \item Générez de manière récursive de nouveaux arbres de décision en utilisant les sous-ensembles de données créés.
+    \item Lorsqu'on ne peut plus classifier les données, on s'arrête.
+\end{enumerate}
+Méthode de division des données : On vas utiliser l'entropie 
+\begin{defn}[Entropie]   
+    \href{https://www.youtube.com/watch?v=YtebGVx-Fxw}{Origine de la formule de l'entropie}
+    Soit $ X $ une variable aléatoire pouvant prendre $ n $ valeurs $ x_i $ 
+    \[
+        H(X) = - \sum_{i=1}^{n}P(X = x_i)\log_{} (P(X = x_i))
+    .\]
+    Mesure l'homogénéité d'un dataset. C'est également la moyenne de la suprise (voir la vidéo)
+\end{defn}
+\begin{defn}[Gain d'information]
+    Mesure la réduction expects de l'entropie causé par le partitioning des exemples.
+
+    En faisant un test $T$ sur un des attributs, on obtient deux partitions d'exemples de $X$ : $X_1$ qui vérifie le test et $X_2$ qui ne vérifie pas le test (resp. $Y_1$ et $Y_2$).
+    \[
+        H(Y|T) = \frac{\left| X_1 \right| }{\left| X \right| } H(Y_1) + \frac{\left| X_2 \right| }{\left| X \right| } H(Y_2)
+    .\]
+    Gain d'information : 
+    \[
+        I(T, Y) = H(Y) - H(Y|T)
+    .\]
+    \textbf{On veut maximiser le gain d'information par le split} $ \Leftrightarrow $ minimiser $ H(Y|T) $ 
+\end{defn}
+
+\section{KNN}
+\begin{itemize}
+    \item Prendre les $ K $ plus proche voisin pour classifier 
+    \item $ K $ petit == noisy and subject to the effects of outliers == overfitting ? 
+    \item $ K $ grand == underfitting
+\end{itemize}
+
+\section{Classfieur bayesien}
+On a : 
+\begin{itemize}
+    \item $ P(y) $ fréquence des classe dans le dataset
+    \item $ P(x|y) $ les points de notre jeux de donnée. Graphiquement : les points coloriés
+\end{itemize}
+On cherche : 
+\[
+    \arg \max _y P(y|x) = \arg \max _y \frac{P(x|y) P(y)}{P(x)}
+.\]
+Naive Bayes : indépendance des dimensions de $ x $, on peut développer le $ P(x|y) = P(x_1|y) \dots P(x_d|y) $.
+
+Puis rapport de vraisemblance \textbf{en utilisant le risque} pour prendre la décision.
+
+Remarque : 
+\begin{itemize}
+    \item Classifier bayésien = le classifier qui minimise le risque = le meilleurs classifieur possible
+    \item Classifier optimal car minimise l'erreur car en choisissant la plus grande proba, on peut pas réduire $ 1 - P(y | x) $ qui est déjà le plus grand possible  
+    \item $ P(x) $ difficile à calculer = répartition des points dans l'espace, dans le graph 2d non colorié. En général très petit, uniquement utile pour générer des données, pas pour faire l'argmax (aka classifier).
+\end{itemize}
+Autre truc important : 
+\begin{itemize}
+    \item On utilise classiquement une 0-1 loss
+    \item Frontière de décision : $ \frac{R(+|x)}{R(-|x)} > 1 $  $\rightarrow$ Permet de prendre en compte les coûts asymétriques des classes. Forme dans $ \mathbb{R}^2 $ : cercle
+\end{itemize}
+
+\section{Estimation de densité}
+\subsection{Par histogramme}
+
+\begin{defn}[Estimation par histogramme]
+    Soit $ Y $ une v.a.r nombre de point tombant dans un bin : $ Y \sim \mathcal{B}(n, p_b V)$. On a donc $ E(Y) = n p_b V \Leftrightarrow p_b = \frac{k}{nV} $. 
+    \begin{itemize}
+        \item Cas discret : Comptage dans chaque classe puis normalisation par le nombre d'exemple $ N $ $\rightarrow p_b = \frac{k}{nV} = \frac{\text{Nb dans le bin}}{\text{nb d'ech tot }*\text{ Volume d'un bin}}$,
+        \item Cas continue : Discrétisation des valeurs puis comptage et normalisation
+    \end{itemize}
+\end{defn}
+Importance de la discrétisation : \begin{itemize}
+    \item Petit $\rightarrow$ sur-apprentissage, trou dans l'histogramme
+    \item Trop grand $\rightarrow$ sous-apprentissage
+\end{itemize}
+Limite : \begin{itemize}
+    \item Grande dimension $\rightarrow$ Perte de sens exponentiel (3 ou 4 max)
+    \item Effet de bord : petit changement dans les bins, gros changement d'estimation. 
+\end{itemize}
+$\rightarrow$ Solution : Estimation par noyaux
+
+\subsection{Estimation de densité par noyaux}
+\begin{figure}[htbp]
+    \centering
+    \includegraphics*[width=\textwidth]{./fig1.png}
+    \caption{Intuition de l'estimation par noyaux}
+    \label{intuitionnoyaux}
+\end{figure}
+Intuition figure \cite*{intuitionnoyaux} : Plutôt que de décider d'une discrétisation a priori, l'estimation est faîte en centrant une fenêtre autour du point d'intérêt $ x_0 $ (dans un espace de dimension $d$) à posteriori. $\rightarrow$ Problème : pas continue (si on bouge la boite et qu'un point rentre dedans, ça fait faire un saut à la fonction)
+
+\subsubsection{Fenêtre de Parzen}
+On combine la solution précédente avec une densité/noyaux. Classiquement Gaussien. pour obtenir un truc lisse et continue
+\begin{defn}[Fenêtre de Parzen]
+    Soit $ (x_1, \dots, x_N) \sim f $ iid 
+    \[
+        \hat{f}_h(x) = \frac{1}{N*h} \sum_{i=1}^{N}K (\frac{x - x_i}{h})
+    .\]
+    Avec $ K $ le noyaux \textbf{centrée et réduit sur $ x $ }, souvent une fonction gaussienne. Si c'est une fonction rectangle ça fonctionne aussi. Puis y'a plein d'autre noyaux possible.
+\end{defn}
+
+\section{Regression Linéaire}
+\begin{itemize}
+    \item MSE : $ (XW - Y)^T (XW - Y) = W^T X^T X W - (Y^T X W)^T - YXW + Y^TY $ 
+    \item \begin{align*}
+        \nabla _W MSE &= 2X^TXW - X^T Y - Y^T X  \\
+            &= 2X^TXW - X^T Y - X^TY  \text{ car } \lambda \in \mathbb{R}, \lambda ^T = \lambda \\
+            &= 2X^T (XW - Y) = 0 \\
+            &\Leftrightarrow W = (X^TX)^{-1} X^T Y
+    \end{align*}
+    \item Sinon descente de gradient
+\end{itemize}
+
+\section{Régression Logistique}
+\begin{itemize}
+    \item On peut pas utiliser la MSE car distance à la frontière de décision peut être très grande pour un point qui est très très très certainement dans une classe
+    \item On vas plutot essayer de modéliser la confiance qu'on a dans la classif d'un point $\rightarrow$ Proba : $ p(y=1|x) = \mu (x) $ 
+    \item Modélisation de cette proba par un truc linéaire qu'on projette entre 0 et 1 avec la sigmoide ou tanh  
+    \item On remarque que le log ratio : $ \log_{} \frac{\mu (x)}{1 - \mu (x)} = f_w(x) $ pour la sigmoide 
+    \item Pas de solution analytique à la log vraiss : descente de gradient
+\end{itemize}
+
+
+
+\section{SVM}
+\begin{itemize}
+    \item Donnée non linéaire $\rightarrow$ Projection, dim ++ $\rightarrow$ Attention sur apprentissage + quel dim choisir $\rightarrow$ SMV do this auto
+    \item Résous le problème de l'unicité de la solution également
+    \item Maximiser la marge $ \gamma  \Leftrightarrow $ minimiser $ \left\| w \right\| $ sous la contrainte $ \forall i, (wx^i + b)y^i \geq 1 $ par des calculs obscures ($ \geq 1 $ car on veut que la distance entre la droite de régression et ces deux marges soit supérieur 1)
+    \item Prise en compte des erreurs : \begin{itemize}
+        \item $ \xi  $ variable de débordement par rapport à sa marge pour chaque point mal classé $\rightarrow$ Raison obscure $\rightarrow \xi = \max (0, 1 - (wx^i + b) y^i) $ Hinge loss
+        \item On avait $\min ||w||^2$ maintenant $\min ||w|||^2 + K \sum_{}^{}\xi $ avec $K$ hyper param nombre d'erreur
+    \end{itemize}
+    \item Optimisation avec lagrangien cas simple
+    \[
+        \begin{cases}
+            & \min _{w,b} \frac{1}{2}\left\| w \right\| ^2\\
+        &\text{s.c } y^i (wx^i + b) \geq 1\\
+    \end{cases} 
+        \Leftrightarrow L(w, b, \alpha) = \frac{1}{2} \left\| w \right\| ^2 - \sum_{i}^{}\alpha _i (y^i (wx^i + b) - 1)
+    .\]
+    \item Optimisation avec Langrangien cas complexe 
+    \item \begin{align*}
+        &\begin{cases}
+            &\min _{w,b} \frac{1}{2}\left\| w \right\| ^2 + K \sum_{i}^{}\xi _i \\
+            &\text{s.c. } y^i (wx^i + b) \geq 1 - \xi _i, \xi _i \geq 0 \\
+        \end{cases} \\ 
+        &\Leftrightarrow \mathcal{L}(w, b, \alpha , \nu ) = \frac{1}{2}\left\| w \right\| ^2 + K \sum_{i}^{} \xi _i - \sum_{i}^{}\alpha _i (y^i(w x^i + b) + \xi _i - 1) - \sum_{i}^{}\nu _i \xi _i 
+    \end{align*}
+        
+\end{itemize}
+Kernel Tricks : 
+\begin{itemize}
+    \item Kernel Function : $ k(x,y) = <\phi (x), \phi(y)> $
+    \item Mesure la similarité entre 2 objets \begin{itemize}
+        \item -- = vecteur opposé = éloigné
+        \item = 0 = produit orthogonal = éloigné 
+        \item ++ = vecteur aligné = proche
+    \end{itemize}
+    \item Stable pas addition, multiplication, composition avec $ f $ polynome, exponentiel
+    \item La complexité de calcul d'un noyau polynomial est linéaire par rapport $d$ le degré du polynome. Mais pas la dimensionnalité de la projection
+    \item 
+\end{itemize}
+
+Généralité SVM 
+\begin{itemize}
+    \item The support vectors are the data points that lie on the margin, which is the region between the decision boundary and the closest data points of each class. Support vectors are critical in SVM because they determine the location and orientation of the decision boundary. All other data points that are not support vectors are not used to construct the decision boundary, which means that SVM is robust to noise and outliers in the data.
+    \item La taille de la marge est un hyper-paramètre important : marge grande == underfitting // marge petite == overfitting (séparation linéaire plus proche des points, moins centrée)
+    \item $ K $ petit = $ K \sum_{}^{}\xi  $ petit = petite pénalisation des erreur = tolérance de celle ci = underfitting // inverse
+\end{itemize}
+
+\section{Perceptron}
+\begin{itemize}
+    \item $ f_w(x) = <x, w> $, décision : $ sign(f_w(x)) $  
+    \item Hinge-loss = $ \max (0, -y f_w(x)) $, vaut 0 quand bonne prédiction
+    \item gradient Hinge loss 
+    \[
+        \nabla H_w = \begin{cases}
+        0 &\text{ si } -y x w < 0\\
+        -yx &\text{ sinon}\\
+        \end{cases} 
+    .\]
+    \item into descente de gradient
+    \item le vecteur de poids $ w $ est normal à l'hyperplans de la séparatrice, $ <w, x> $ mesure l'angle entre les deux vecteurs, maj : on fait bouger l'hyperpaln en fct de cette angle 
+\end{itemize}
+Théorème de convergence : si
+\begin{itemize}
+    \item $ \exists R, \forall x \left\| x \right\| \leq R $ 
+    \item Les données peuvent être séparées avec une marge p
+    \item L'ensemble d'apprentissage est présenté au perceptron un nombre suffisant
+    de fois
+\end{itemize}
+Alors : après au plus $ \frac{R^2}{p^2} $ correction, l'algo converge
+
+Point méthode exo du TD XOR : 
+\begin{itemize}
+    \item Nombre de neurone en entré = nombre de droite séparatrice
+    \item Trouver les équation de ces droite pour la première couche
+    \item La sortie = binaire à gauche ou à droite de chaque séparatrice : $ f_w(x) < 0 $, permet de situer le point 
+    \item $\rightarrow$ Nouvelle espace de point possible à dessiner $\rightarrow$ nouvelle séparatrice $\rightarrow$ nouveau poids $\rightarrow$ décision
+\end{itemize}
+\section{Réseau de neurone}
+\subsection{Les bases}
+\[
+    \begin{aligned}
+        & \frac{\partial L}{\partial w_i^h}=\sum_k \frac{\partial L}{\partial z_k^h} \frac{\partial z_k^h}{\partial w_i^h}=\sum_k \delta_k^h \frac{\partial z_k^h}{\partial w_i^h}, \text { soit } \nabla_{\mathbf{w}^h} L=\left(\begin{array}{ccc}
+            \frac{\partial z_1^h}{\partial w_1^h} & \frac{\partial z_2^h}{\partial w_1^h} & \cdots \\
+            \frac{\partial z_1^h}{\partial w_2^h} & \ddots & \\
+            \vdots & &
+        \end{array}\right) \nabla_{\mathbf{z}^h L} \\
+        & \delta_j^{h-1}=\frac{\partial L}{\partial z_j^{h-1}}=\sum_k \frac{\partial L}{\partial z_k^h} \frac{\partial z_k^h}{\partial z_j^{h-1}}, \text { soit } \nabla_{\mathbf{z}^{h-1}} L=\left(\begin{array}{ccc}
+            \frac{\partial z_1^h}{z_1^{h-1}} & \frac{\partial z_2^h}{z_1^{h-1}} & \cdots \\
+            \frac{\partial z_2^h}{z_2^{h-1}} & \ddots & \cdots \\
+        \vdots &
+        \end{array}\right) \nabla_{\mathbf{z}^h L}
+    \end{aligned}
+.\]
+You can intuitively understand the delta as the difference between where a neuron weight is at the moment and where you want it to be.
+
+\subsection{Les modules, leurs dérivées, leurs atoux}
+
+\begin{multicols}{2}
+Paramètres : \\
+Formule : $ M^h(z^h) =  $ \\
+Dérivé : $ \frac{\partial M^h}{\partial w} = , \frac{\partial M}{\partial z^h} = $ \\
+Atoux : 
+
+
+\subsubsection{Linear}
+Paramètre : $ W \in \mathbb{R}^{input \times output} $ \\
+Formule : $ M^h(z^h) =  {z^h}^T * W $ \\
+Dérivé : $ \frac{\partial M^h}{\partial w}(z^h) = z^h, \frac{\partial M}{\partial z^h} = W $ \\
+
+\subsubsection{TanH}
+Paramètre : \\
+Formule : $ M^h(z^h) =  \tanh(z^h) = \frac{\sinh z^h}{\cosh z^h} = \frac{\exp(z^h) - \exp(-z^h)} {\exp(z^h) + \exp(-z^h)} = \frac{e^{2z^h} - 1 }{e^{2z^h} + 1}$ \\
+Dérivé : $\frac{\partial M}{\partial z^h} = 1 - \tanh (z^h)^2$ \\
+Atoux : Entre -1 et 1
+
+
+\subsubsection{Sigmoid}
+Paramètre : \\
+Formule : $ \displaystyle M^h(z^h) =  \sigma(z^h) = \frac{1}{1 + \exp(-z^h)} = \frac{e^{z^h}}{1 + e^{z^h}} = 1 - \frac{1}{1 + e^{z^h}}$ \\
+Dérivé : $ \displaystyle \frac{\partial M}{\partial z^h} = \sigma (z^h) * (1 - \sigma (z^h)) = \frac{e^{-x}}{(1 + e^{-x})^2} = \frac{e^{x}}{(1+e^x)^2}$ \\
+Atoux : Entre 0 et 1. Evite l'explosion de l'activation \\ 
+Formule : \begin{align*}
+    1 - \sigma (x) = \frac{1}{1 + e^x} &= \frac{e^{-x}}{1+e^{-x}}
+    \sigma '(x) / \sigma (x) &= \sigma (-x) \\
+    \sigma '(x) * \sigma (x) &= \frac{e^{-x}}{(1 + e^{-x})^3} = \frac{e^{2x}}{(1 + e^{x})^3}
+\end{align*}
+
+
+\subsubsection{SoftMax}
+Paramètres : \\
+Formule : $ M^h(x_i) = \frac{\exp(x_i)}{\sum_j \exp(x_j)} $ \\
+Dérivé : $ \frac{\partial M(x_i)}{\partial x_i} = M^h(x_i) * (1 - M^h(x_i)) $ plus précisement $ \frac{\partial M^h(x_i)}{x_j} = \begin{cases}
+    M^h(x_i) * ( 1 - M^h(x_j) ) &\text{si } i = j \\
+    - M^h(x_j) M^h(x_i) &\text{ si } i \neq j \\
+\end{cases}  $  \\
+Atoux : Combo cross entropy pour plus de perf en dernière couche je crois ça se calcule mieux. Y'a une interprétation proba aussi.
+
+
+\subsubsection{LogSoftMax}
+Paramètres : \\
+Formule : $ M^h(z^h) = \log ( \frac{ \exp(x_i) }{ \sum_j \exp(x_j) } ) $ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} =  $ \\
+Atoux : When used for classifiers the log-softmax has the effect of heavily penalizing the model when it fails to predict a correct class.
+
+\subsubsection{ReLU}
+Paramètres : \\
+Formule : $ M^h(z^h) = \max (0, x) $ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} = 1 \text{ if } x > 0 \text{ else } 0 $ \\
+Atoux : Evite l'évanouissement du graident, plus leger à calculer que la sigmoide, meilleurs convergence que la sigmoide ; dying relu : si trop de neurone passe à zéro, ça se propage dans le réseau (solution : leaky relu). Je crois que la ReLU est utile pour les attributs binaire.
+
+\subsubsection{SoftPlus/SmoothReLU}
+Paramètres : \\
+Formule : $ M^h(z^h) = \ln (1 + e^x) $ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} = \sigma (x) = \frac{1}{1 + e^{-x}} $ \\
+Atoux : Approxime la relu d'une manière dérivable partout
+
+\subsubsection{LearkyReLU}
+Paramètres : \\
+Formule : $ M^h(z^h) = \max(\alpha x, x) $ \\
+Dérivé : $ \frac{\partial M}{\partial z^h} = 
+    \begin{cases} 
+        1 & \text{if } x>0, \\
+        \alpha & \text{otherwise}.
+    \end{cases}$ \\
+Atoux : Leaky ReLUs allow a small, positive gradient when the unit is not active.
+
+\subsubsection{MSELoss}
+$ MSE = ||y - \hat{y}||^2 $ 
+
+\subsubsection{Cross Entropy Loss}
+$ CE = - \sum_{i=1}^{n} y_i \log_{} p_i $ for $ n $ classe, avec $ p_i $ proba soft max pour la classe $ i $ 
+
+\subsubsection{Binary CE Loss}
+CE loss mais pour deux class : $ BCE = - [ y \log_{} p + (1 - y) \log_{} (1 - p) ] $ 
+
+\subsubsection{CELog Soft Max}
+$ \displaystyle \text{CE}(y, \hat{y}) = - \log \frac {e^{\hat{y}_y}} {\sum_{i=1}^{K}e^{\hat{y}_i}} $
+
+\end{multicols}
+
+\section{Non supervisé}
+Idée : toujours minimiser une distance intra cluster, maximiser l'extra cluster, construire une projection des points dans un nouvel espace. \\
+Clustering hiérachique : 
+\begin{itemize}
+    \item approche agglomératives (bottom-up) VS division des cluster (top down)
+    \item Distance : linkage \begin{itemize}
+        \item Simple linkage : $ d(c_1, c_2) = \min d(x, x') $ avec $ x \in c_1, x' \in c_2 $ 
+        \item Complete linkage : $ d(c_1, c_2) = \max d(x, x') $ avec $ x \in c_1, x' \in c_2 $ 
+        \item $ d(c_1, c_2) = \mathbb{E}(d(x, x')) $ avec $ x \in c_1, x' \in c_2 $ 
+    \end{itemize}
+\end{itemize}
+Choix du nombre de cluster : 
+\begin{itemize}
+    \item Elbow method : nombre de cluster en abscisse, ration entre moyenne des distance intra-cluster et variance total du dataset $\rightarrow$ étude de la variance expliquée par le clustering en fonction du nombre de cluster 
+    \item Coefficient silhouette : \begin{itemize}
+        \item en fonction du nombre de cluster
+        \item Silhouette d'un point $ i $ : Mesure de l'homogénéité des cluters
+        \item $ = \frac{b(i) - a(i)}{ \max (a(i), b(i))} $ avec $ a(i) $ moyenne de la distance intra-cluster d'un point (?) et $ b(i) $ le minimum des distances d'un point aux autres clusters
+    \end{itemize}
+\end{itemize}
+
+\subsection{K-mean}
+\begin{itemize}
+    \item Résultat très sensible de l'initialisation + converge vers min local $\rightarrow$ multiple tentatives et prendre la meilleure
+    \item Minimiser $ \arg \min _{\pi = (D_1, \dots, D_k)} \sum_{i=1}^{K} \sum_{x_i \in D_i}^{} d(x_j, \mu _i)$ avec $ \mu _i = \frac{1}{\left| D_i \right| } \sum_{x_i \in D_i} x_j$ centroïde cluster $ i $ 
+    \item Fonction de coût : $ F(\mu , C) = \sum_{j}^{} \left\| \mu _{C(x_j)} - x_j \right\|^2 = \sum_{i=1}^{K} \sum_{j, C(x_j) = i} \left\| \mu _i - x_j \right\| $ 
+    \item Pas de hierarchie : on ne peut pas fusioner/diviser des clusters
+\end{itemize}
+
+\subsection{Clustering par densité : DBSCAN}
+\begin{itemize}
+    \item HP : régions denses sont séparées par des régions de faible densité : 
+    \item Estimer densité d'une régions (par noyaux), trouver ces points, enfaire un cluster
+    \item DBSCAN : \begin{itemize}
+        \item Hyperparam : Région : $ \epsilon  $ rayon de la boule de recherche de point, région dense $ m $  nombre de voisin dans cette région
+        \item Algo : Calculer le voisinage à $ \epsilon  $ point, si ce voisinage contient plus de $ m $ point, calculer le voisinage de chacun de ces points, jusqu'à stabilisation du cluster.
+        \item Si point isolé = bruit
+        \item Pour / Contre : \begin{itemize}
+            \item pas de $ k $ cluster à définir mais hyperparam plus difficile encore. 
+            \item Pas d'effet single link (clusters connectées par une connection fine)
+            \item Evite les problèmes avec les outlier/bruit qui sont introduit naturellement dans l'algo
+            \item curse of dimentionnality : marche mal en haute dimension
+            \item 
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+\subsection{Spectral clustering}
+\begin{itemize}
+    \item projection sur un graph pour bypass limite des approche utilisant une métrique (cluster sphériques, pas d'encodate d'une structuration des données, des relation de voisinages) 
+    \item Noyaux pour pondérer les arrete (noyaux gaussien : $ w_{ij} = \exp (- \left\| x_i - x_j \right\|^2 / \sigma ^2 ) $ )
+    \item Notion de coupe : $ cut(C_1, C_2) = \sum_{i \in C_1, j \in C_2} w_{ij}, C_1 \cap C_2 = \varnothing $ 
+    \item Coupe normalisé : pour avoir des clusters de même taille $ NormCut(C_1, C_2) = \frac{Cut(C_1, C_2)}{Vol(C_1)} + \frac{Cut(C_1, C_2)}{Vol(C_2)} $ avec $ Vol(C) = \sum_{i, j \in C} w_{ij}$  
+    \item NP difficile
+    \item \textbf{TODO} : Ficher l'exo de TD
+\end{itemize}
+
+\section{Réduction de dimension}
+\begin{itemize}
+    \item Curse of dimensionality : $ d^{-1/2} (\max \left\| X_i - X_j \right\| - \min \left\| X_i - X_j \right\| ) \to 0 \Leftrightarrow \frac{\max \left\| X_i - X_j \right\| }{\min \left\| X_i - X_j \right\| } \to_{d \to + \infty } 1 $ tout les points son quasiment équidistants  
+    \item Moins de dimension $\rightarrow$ meilleurs explicabilité
+    \item Deux approche : selectionner des dimensions VS construire de nouvelles dimensions (erreur de reconstruction ou conservation des distances)
+\end{itemize}
+
+\subsection{Principal Component Analysis : PCA}
+Combinaison linéaire des dimension, projection dans une nouvelle base/dimension qui maximise la variance
+
+Variance corrigé projeté : \begin{align*}
+    \sigma _v^2 &= \frac{1}{n-1}\sum_{i=1}^{n}(\pi (x_i - g))^T (\pi (x_i - g)) \\
+    &= v^T \Sigma v
+\end{align*}
+Avec $ \Sigma = (n-1)^{-1} X X^T, X = (x_1 - g, x_2 - g, \dots, x_n - g) = X - g$ matrice de covariance variance des données
+\[
+    \begin{cases}
+    \max v^T \Sigma v &\text{}\\
+    \text{s.c } v^T v = 1\\
+    \end{cases} \Leftrightarrow \Sigma v = \lambda v
+.\]
+Par définition de la diagonalisation : $ \lambda $ valeurs propre et $ v $ vecteur propre de $ \Sigma  $ \\
+$\Rightarrow $ Composant principal = les vecteurs propres ayant les plus grandes valeurs propre. On peut choisir de garder 95\% de la variance par exemple.
+
+Analyse : \begin{itemize}
+    \item Graph pourcentage de variance explqiué par dimension
+    \item Cercle de corrélation : les variables corrélées positivement sont groupée, négativement sont poisitionnées à l'opposé, loin de l'origine sont bien représentées
+\end{itemize}
+
+\subsection{Multi-dimensional Scaling (MDS)}
+But : conservation des distances deux à deux des points
+\begin{itemize}
+    \item $ x' = U^T(x-m), U $ matrice orthonormale, $ m = $ moyenne des $ x_i $ 
+    \item $ \min \sum_{i=1}^{N} \sum_{j=1}^{N} ( < x_i - m, x_j - m> - <x'_i , x'_j> )^2 $ 
+    \item $\Leftrightarrow \min \sum_{i=1}^{N} \sum_{j=1}^{N} ( < x_i - m, x_j - m> - (x_i - m )^T U U^T (x'_j - m) )^2$ 
+    \item Soution : vecteur propre de la matrice de Gram : $ G = (X - m)(X - m)^T $
+    \item Proche PCA mais $ XX^T $ à la place de $ X^T X $ 
+\end{itemize}
+Inconvénients : prends en compte toutes les dimensions (bruit, corrélation), applicable que si $ N \leq \leq d $ et $ d $ petit (?)
+
+\subsection{Isomap}
+\begin{itemize}
+    \item Essaye de préserver la distance géodésique, remplace MDS quand on veut pas la distance euclidienne
+    \item Graph de voisinage (avec un KNN par exemple) $\rightarrow$ calcule la distance (chemin pondéré le plus court) entre les points deux à deux dans ce graphe $\rightarrow$ MDS sur le résultat
+\end{itemize}
+
+\subsection{t-SNE}
+\begin{itemize}
+    \item Trouver une \textbf{projection} qui conserve le voisinage
+    \item Soit un dataset de $ N $ point $ x_1, \dots, x_N $, on construit veut contruire une probabilité $ p_{ij} $ proportionnel à la similarité entre les points $ x_i $ et $ x_j $ 
+    \item Soit $ P_{i|j} = \frac{ \exp (- \left\| x_i - x_j \right\| ^2 / 2 \sigma_i ^2 ) }{\sum_{k \neq i}^{} \exp (- \left\| x_i - x_k \right\| ^2 / 2 \sigma_i ^2 ) } $, $ p_{i|i} = 0 $ 
+    \item The similarity of datapoint $x_{j}$ to datapoint $x_{i}$ is the conditional probability, $ p_{j|i} $, that $x_{i}$ would pick $x_{j}$ as its neighbor if neighbors were picked in proportion to their probability density under a Gaussian centered at $x_{i}$.
+    \item Now define $ p_{ij} = \frac{p_{j|i} + p_{i|j}}{2N}$ car on estime que $ P(i) = p_i \sim Unif (1/N) $ 
+    \item Maintenant on veut faire matcher cette distibution de proba avec celle de notre espace d'arrivé $ y_1, \dots, y_N, y_i \in \mathbb{R}^d, d $ usuellement 2 ou 3
+    \item $ q_{ij} = \frac{(1 + \left\| y_i - y_j \right\| ^2) ^{-1}}{\sum_{k}^{} \sum_{l \neq k}^{} ( 1 + \left\| y_k - y_l \right\| ^2) ^{-1}}$ Mesure de la similarité entre deux point proche de celle d'avant mais cette fois par construction elle veut fortement éloigner les point dissimilaire.
+    \item On mesure la distance entre les deux distribution de proba avec la KL divergence $ KL(P || Q) = \sum_{i \neq j}^{}p_{ij} \log_{} \frac{p_{ij}}{q_{ij}} $ + une descente de gradient 
+\end{itemize}
+
+\subsection{Compress sensing / Apprentissage de dictionnaire}
+\begin{itemize}
+    \item Objectif trouver $ D $ tel que $ x \approx D x' $ avec $ D $ sparse $ \Leftrightarrow \left\| x' \right\|_0  $ (la norme zéro compte les élément non zero)
+    \item Ca force la simplicité (quelque atomes suffisent à expliquer $ x $ ), signification, parcimonie (?)
+    \item Problème d'opti assez simple : $ \arg \min _D \left\| D x' - x \right\| + \lambda \left\| x' \right\| _0 $ (différente norme et différente variante)
+\end{itemize}
+
+\section{Gaussien process}
+Basicly, tu peux définir le résutlat de ton précessus gaussien uniquement par la matrice de variance covariance. Qui elle même se caractérise entièrement par un kernel. Elle vérifie les même propritété qu'un kernel.
+
+
+\section{Théorie de l'apprentissage}
+\begin{figure}[!htbp]
+    \centering
+    \includegraphics*[width=.65\textwidth]{biais-variance.png}
+    \caption{Variance = estimation error, biai = approximation error}
+    \label{<label>}
+\end{figure}
+\begin{itemize}
+    \item Algorithme universellement consistant : risque de la fonction apprise converge vers le risque bayesien. Si on peut overfit sur n'importe quel jeu de donnée (comme un arbre de décision ou un réseau de neurone avec nombre de paramètre infiny).
+    \item Biais : risque lié à la restriction de la taille de l'ensemble de fonction où on cherche la fonction optimal
+    \item Variance : Risque lié à notre set de train et au capacité de généralisation du modèle
+    \item Compromis biais variance : Si on augmente la taille de $\mathcal{F}$ alors on réduit le biai potentiel mais on augmente la variance potentielle
+    \item Pour un ensemble discret $ \mathcal{F} $, on peut trouver une vitesse de convergence logarithmique par rapport aux nombre de fonction $ \left\| \mathcal{F} \right\|  $ 
+    \item Pour un ensemble infiny de fonction : de même mais utilise la VC-dimension de $ \mathcal{F} : VC(\mathcal{F}) $ 
+    \item VC-dimension : \begin{itemize}
+        \item Un ensemble de points est shattered (pulvérisé) par un espace de fonction si pour tout partitionnement des points en deux ensembles il existe une fonction qui sépare les deux partitions.
+        \item La VC-dimension (Vapnik-Chervonenkis) de F sur un espace de données $ \mathcal{X} $  est la taille du plus grande ensemble fini de points de $ \mathcal{X} $  pulvérisé par $ \mathcal{F} $ .
+        \item Fonctions linéaires : en dimension $ d $, VC-dimension de $ d + 1 $
+        \item le nombre d'exemples doit être linéaire en fonction de $ VC(\mathcal{F}) $ 
+        \item \textbf{VC-dim grande} = modèle flexible = fit/overfit sur données complexe = plus sensible au bruit // \textbf{VC-dim faible} = fonction plus "général" = moins d'overfit mais moins de performance aussi = plus robust au bruit 
+    \end{itemize}
+\end{itemize}
+
+\section{Bagging et Boosting}
+On veut pouvoir combiner des classfiers, ils doivent être indépendant. Comment les rendre indépendant entre eux ? Deux solutions
+
+\subsection{Bagging}
+\begin{itemize}
+    \item Sous échantillon du train, tirage avec remise
+    \item Random forest = arbre de décision + bagging = randomisation du support de décision puis moyenne de tous les noeuds des arbres 
+    \item Chacun vas un peu apprendre une partie de l'espace, lié au hasard, puis les décision se moyenne
+    \item Très efficace à grande dimensionnalité
+\end{itemize}
+
+\subsection{Boosting}
+\begin{itemize}
+    \item Correction des erreurs faite en $ n-1 $ en $ n $ avec une pondération des exemples dans la loss
+    \item Poids uniforme $\rightarrow$ On augmente le poids où il a fait des erreurs et baisse les poids des bons exemples
+    \item $\rightarrow$ combinaison des frontière de décision
+    \item Beaucoup d'overfit $\rightarrow$ garder des arbres de décision à faible profondeur
+    \item Ecrit sous une forme gloutone == descente de gradient pour les arbre de décision 
+    \item AdaBoost : Si l'erreur est supérieur à 0.5 on a pas su améliorer la classif alors on arrete
+\end{itemize}
+
+
+\section{Reinforcement Learning}
+\subsection{Policy itération}
+Policy itération : policy evaluation + policy improvement, and the two are repeated iteratively until policy converges.
+\begin{itemize}
+    \item $ V^\pi (s) = E[G_t | S_t = s] = E[ \sum_{k \geq 0}^{} \gamma ^k R_{t+k}] $ avec $ R_{t+k} $ les récompenss obtenues à l'état $ t+k $. $ V^\pi $ représente la moyenne des récompenses possible dans le futur, futur plus où moins proche réglé par $ \gamma  $ 
+    \item Par l'equation de Bellman
+    \[
+        V_{k+1}(s) = (T^\pi V_k)(s) = \sum_{a}^{}\pi (a | s) \sum_{s'}^{}P(s' | s, a) [r(s, a, s') + \gamma V_k(s')]
+    .\]
+    \item Une application répété de l'opérateur de Bellman $ T^\pi  $ fait converger $ V_k $ pour évaluer la policy $ \pi  $ 
+    \item Puis mise à jour de la politique pour chaque état en choisisant l'action qui maximise $ V^k(s) $ si j'ai bien compris. 
+    \[
+        \pi _{k+1}(s) = argmax_a \sum_{s'}^{} P(s' | s, a) [ r(s, a, s') + \gamma V^{k}(s')]
+    .\]
+    \item L'étape d'évaluation de la policy est couteuse. On peut la skip en évaluant directement chaque action pendant l'entrainement, ça fait sauter la première somme dans la formule donnant l'algo de Policy Itératio
+    \item Convergence par le théorème de la convergence monotone de Howard. Condition \begin{itemize}
+        \item L'environnement doit être fini et le processus de décision de Markov (MDP) doit être stationnaire, c'est-à-dire que les probabilités de transition et les récompenses associées ne changent pas au fil du temps.
+        \item L'algorithme doit être initialisé avec une politique arbitraire.
+        \item Les valeurs initiales des états doivent être fixées à zéro.
+        \item Le coefficient de discount (gamma) doit être strictement inférieur à 1.
+    \end{itemize}
+\end{itemize}
+
+
+\paragraph*{Application} : 
+
+Evaluation d'une politique $ \pi $ 
+\begin{itemize}
+    \item Initialiser $ \pi ^0 $ avec une loi uniforme par rapport au nombre d'action disponible dans chaque état et $ V^\pi _0 = 0 $ partout. Les états finaux vont rester à zéros tout le long.
+    \item Simplifier et écrire la formule pour notre MDP, en particulier pour les états stochastiques ou non, la somme avec la proba peut disparaitre où bien se réduire.
+    \item Tableau avec les états en colonne et les $ V^\pi_k (s) $ en ligne, on vas faire augmenter $ k $ 
+    \item Appliquer la formule à chaque étape
+\end{itemize}
+Exemple d'une formule simplifiée : Voir TD9 Question 2 avec une marche aléatoire. 
+\[
+    \pi (gauche | s_i) (r(s_i, g, s_{i-1}) + \gamma V_k^\pi (s_{i-1})) + \pi (droite | s_i) (r(s_i, d, s_{i+1}) = \gamma V_k^\pi (s_{i+1}))
+.\]
+
+Mise à jour de $ \pi $ : Utiliser la formule.
+
+\subsection{Value iteration}
+Pareil mais :\begin{itemize}
+    \item Random value function (d'après internet)
+    \item pour la maj de $ V_k^pi $ on donne directe la valeur max. On n'évalue plus la politique mais on fait directement converger la Value fonction pour ensuite seulement choisir la politique
+    \[
+        V_{k+1}(s) = \max _a \sum_{s'}^{}P(s'|s, a)[r(s,a,s') + \gamma V_k (s')]
+    .\]
+    \item une update final de la politique uniquement après avoir fait converger la value function. Avec la même formule qu'en policy iteration.
+\end{itemize}
+Atoux \begin{itemize}
+    \item Algo plus simple
+    \item Plus lent à converger que policy iteration.
+\end{itemize}
+
+\end{multicols}
+\end{document}

@@ -17,7 +17,7 @@
 1. 
 Soit $v$ la ville du garage et $idgarage$ sont id
 - $Garage_v = \sigma_{ville=v}(Garage)$
-- $Habilite_v =  Habilite \bowtie Garage_v $
+- $Habilite_v =  Habilite \bowtie Garage_v$
 - $Mecanicien_v = Mecanicien \bowtie Garage_v$
 - $Personne_v = Personne \bowtie Mecanicien_v$
 - $Reparation_v = Reparation \bowtie Mecanicien_v$
@@ -43,7 +43,7 @@ Facile, on fait la même chose mais avec
 
 # TD7
 ## Exercice 4 page 4 (ER2-19)
-1. $P(R) = \frac{card(R)}{T_{page} / largeur(R)} = \frac{card(R)}{a} \Leftrightarrow card(R) = P(R) * T_{page} / largeur(R) $
+1. $P(R) = \frac{card(R)}{T_{page} / largeur(R)} = \frac{card(R)}{a} \Leftrightarrow card(R) = P(R) * T_{page} / largeur(R)$
 
 Taille d'un tuple de $R_1 : t(R_1) = 2 * 10 = 20$ octet
 
@@ -64,6 +64,34 @@ Taille d'un tuple de $R_1 : t(R_1) = 2 * 10 = 20$ octet
    => J'ai faux **je comprends rien à la correction**
 
 Pourquoi on doit se fix des blocs comme ça ? Pourquoi on divise par 50 pour R2 ? Pourquoi on utilise pas la formule du cout par hachage externe ? Qui ne peux mathématiquement pas donner un 3 pour le premier coût
+
+   Correction : Par hashage
+      * On veut $Cout(T)$ par hachage mais ni R1 ni R2 ne tiennent en mémoire (mémoire de 201)
+      * **Lire** R1 par blocs de 200 pages : on a $\frac{10000}{200} = 50$ blocs
+      * On veut répartir les données de R1 en 50 paquets de 200 pages en utilisant une fonction de hachage $h$ $\rightarrow$ $P(R1)$ écritures pour répartir R1
+      * Lire R2 par blocs de 200 pages pour la répartir en fonction de $h$. Remarque : les paquets de T2 font $\frac{100 000}{50} = 2000$ pages $\rightarrow$ P(R2) écritures
+      * Jointure entre les paires de paquets ayant le numéro de paquet $\rightarrow P(R1) + P(R2)$
+      * Total : $cout(T) = 3P(R1) + 3P(R2)$
+   
+   Correction : Par tri fusion
+      * Lire et trier R1 en 50 blocs de 200 pages : $ 2P(R1) $ 
+      * Lire et trier R1 en $\frac{10000}{200} = 500$ blocs de 200 pages : $ 2P(R2) $ 
+      * On a $50 + 500 > 200$ donc il faut fusionner R2 avant de commencer la jointure oar fusion
+      * Fusion des blocs de R2 en $\frac{500}{200} = 3$ blocs : $2P(R2)$
+      * Nombre de blocs :
+         * R1 : 50 blocs
+         * R2 : 3 blocs
+         * $\rightarrow 52 < 200$ donc on peut calculer la jointure
+      * Jointure par fusion : $P(1)+P(2)$
+      * Total : $Cout(T) = 3P(R1) + 5P(R2)$
+   * Transfert de T sur S3 : $P(T)* t_S = 150 000 t-S$
+   * $Cout(Q)$ ? Par hachage externe
+      * Lire R3 et répartir en $\frac{10000}{200} = 50$ blocs : $2P(R3)$
+      * Répartir T (provenant du site S2) en 50 blocs : $P(T)$
+      * Jointure : $(P(R3) + P(T))t_{IO}$ 
+      * Total : $(3P(R3)+P(T))t_{IO}$
+   * Transfert Q : $P(Q)t_S = 200 000 t_s$
+![](https://cdn.discordapp.com/attachments/622453387954487346/1110440396988895262/image.png)
 
 ## Exercice 1 page 12 : Requête réparties avec JDBC
 1. 
@@ -328,40 +356,11 @@ Pourquoi on doit se fix des blocs comme ça ? Pourquoi on divise par 50 pour R2 
          * M4 : (T4, M1), (T1, M3), (T7, M3), (T3, M4)
       * Je pense que c'est ordonée comme demandé dans la consigne, d'abord par rapport à la machine d'origine, si égalité par rapport au numéro de la requete
    2. Pas d'impact dance qu'on a fait avant. Dans M4 on lit juste G. pour T7 sur M4 : lire G et l'envoyer à M2 mais inutile de traiter (lire le code de la transaction) T7 sur M4. (**pas compris**)
-3. Sur M1 
-   * Envoyer T4 sur M3
-   * Recevoir T6 de M2
-   * Recevoir T3 de M4
-   * Traiter T5 
-   * Traiter T6
-   * Traiter T3
-   * Envoyer T3 à M4 
-
-   * On part de la deuxième table avec les transactions où M1 est nécéssaire pour traiter les transactions
-   * Traiter les transaction à faire entièrement en local
-   * Envoyer les tables nécéssaires pour que les autres effectues leur transaction
-   * Recevoir les tables nécéssaires pour terminer nos transactions
-   * Traiter ces dernières transaction maintenant complète 
-   * Sur M1 :
-      * Traiter T5 car local
-      * Traiter T6 
-      * Envoyer B à M4
-      * Recevoir G de M4 
-      * Traiter T3 avec le G reçu
-   * Sur M2 
-      * Traiter T2 
-      * Recevoir G de M4
-      * Traiter T7 
-   * Sur M3 
-      * T2 est déjà traité , il reste T4
-      * Recevoir G de M4 
-      * Traiter T4
-   * Sur M4
-      * Il reste T1 qui est local 
-      * Traiter T1 
+3. 
   
-  **Correction** : on recois des table pas des transactions ; 
-   PAS COMPRIS
+   **Correction** : PAS COMPRIS
+   ![](https://cdn.discordapp.com/attachments/622453387954487346/1110441808724508702/image.png)
+   ![](https://cdn.discordapp.com/attachments/622453387954487346/1110442064837083186/image.png)
 
 ## Exercice 10 page 10
 Les joueurs sont répartis sur 15 machines en "round"robin" (a tour de rôle)

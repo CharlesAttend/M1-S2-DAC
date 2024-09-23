@@ -6,7 +6,7 @@
 * RITAL : Recherche d’Information et Traitement Automatique du Langage Naturel
 * DJ : Décisions et jeux
 
-Pour plus de cours, il y a ce [lien google drive](https://drive.google.com/drive/folders/1g7cq-u_X6-kglTt23AGK8-1U69PVNY8L?usp=sharing)
+Pour plus de cours, en particulier d'ANDROID, il y a ce [~lien drive~](https://drive.google.com/drive/folders/1g7cq-u_X6-kglTt23AGK8-1U69PVNY8L?usp=sharing) et ce [lien drive](https://drive.google.com/drive/folders/1g7cq-u_X6-kglTt23AGK8-1U69PVNY8L?usp=sharing) de *youssefkadhi*.
 
 ## Notes manuscrites
 Mes notes manuscrites et TD sont disponibles sur [OneNote](https://1drv.ms/o/s!BOqn6pm6cqW2gcYnkuJlL5h9pPtekg).

@@ -1,6 +1,6 @@
 # 🚀 **Contribuez à ce dépôt !** 🚀
 
-📢 **Chers étudiants,**
+📢 **Chères et chers étudiant·es,**
 
 Ce dépôt regroupe des **ressources précieuses pour notre Master**. Je vous **encourage** **vivement** à y contribuer et à le faire vivre, en particulier en ajoutant :\
 ✅ **Les annales d'examens !** 📚\
